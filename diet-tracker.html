@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet & Nutrition Tracker - HormoCare AI</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HormoCare AI</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#features" class="nav-link">Features</a>
+                <a href="index.html#app" class="nav-link">Tracker</a>
+                <a href="diet-tracker.html" class="nav-link diet-link active"><i class="fas fa-utensils"></i> Diet Tracker</a>
+            </div>
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <a href="index.html#app" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+
+        <h2 class="section-title">Diet & Nutrition Tracker</h2>
+        <p class="form-subtitle">Track your daily meals and monitor nutritional intake. A PCOS-friendly diet focuses on low GI foods, adequate protein, and anti-inflammatory ingredients.</p>
+
+        <!-- Date Picker -->
+        <div class="tracking-date-picker" style="margin-bottom: 2rem;">
+            <button class="date-nav-btn" id="dietPrevDay"><i class="fas fa-chevron-left"></i></button>
+            <input type="date" id="dietDate" max="">
+            <button class="date-nav-btn" id="dietNextDay"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <!-- Nutrition Summary -->
+        <div class="nutrition-summary" id="nutritionSummary"></div>
+
+        <!-- Water Intake -->
+        <div class="water-tracker" id="waterSection"></div>
+
+        <!-- Meal Sections -->
+        <div id="mealSections"></div>
+
+        <!-- Food Search & Add -->
+        <div class="food-search-section">
+            <h4><i class="fas fa-plus-circle"></i> Add Food Item</h4>
+            <div class="food-search-container">
+                <select id="mealTypeSelect" class="meal-type-select">
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snacks">Snacks</option>
+                </select>
+                <div class="food-search-wrapper">
+                    <input type="text" id="foodSearchInput" placeholder="Search food... (e.g. rice, dal, roti, paneer)" autocomplete="off">
+                    <div class="food-suggestions" id="foodSuggestions"></div>
+                </div>
+            </div>
+            <div class="manual-food-entry" id="manualFoodEntry" style="display:none">
+                <h5>Custom Food Item</h5>
+                <div class="manual-food-grid">
+                    <input type="text" id="customFoodName" placeholder="Food name">
+                    <input type="number" id="customCalories" placeholder="Calories" min="0">
+                    <input type="number" id="customProtein" placeholder="Protein (g)" min="0" step="0.1">
+                    <input type="number" id="customCarbs" placeholder="Carbs (g)" min="0" step="0.1">
+                    <input type="number" id="customFats" placeholder="Fats (g)" min="0" step="0.1">
+                </div>
+                <button class="btn-small" id="addCustomFoodBtn"><i class="fas fa-plus"></i> Add Custom Food</button>
+            </div>
+            <button class="btn-link" id="toggleManualEntry">+ Add custom food manually</button>
+        </div>
+
+        <div id="diet-msg" class="form-message"></div>
+
+        <!-- Weekly Overview -->
+        <div id="weeklyOverview" style="margin-top: 2rem;"></div>
+
+        <div class="form-actions" style="margin-top: 2rem; margin-bottom: 3rem;">
+            <a href="index.html#app" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        let currentDate = new Date().toISOString().split('T')[0];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Mobile menu
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+
+            document.getElementById('dietDate').value = currentDate;
+            document.getElementById('dietDate').max = currentDate;
+            renderPage();
+            attachHandlers();
+        });
+
+        function renderPage() {
+            const entry = hormoCareApp.getDietEntry(currentDate) || { meals: [], waterIntake: 0 };
+            const meals = entry.meals || [];
+            const goals = hormoCareApp.dailyGoals;
+            const totals = hormoCareApp._calculateDietTotals(meals);
+
+            // Nutrition Summary
+            document.getElementById('nutritionSummary').innerHTML = `
+                <div class="macro-card calories">
+                    <div class="macro-ring" style="--percent: ${Math.min(100, (totals.calories / goals.calories) * 100)}">
+                        <span class="macro-value">${totals.calories}</span>
+                    </div>
+                    <span class="macro-label">Calories</span>
+                    <span class="macro-goal">/ ${goals.calories} kcal</span>
+                </div>
+                <div class="macro-card protein">
+                    <div class="macro-bar"><div class="macro-fill" style="width: ${Math.min(100, (totals.protein / goals.protein) * 100)}%"></div></div>
+                    <span class="macro-value">${totals.protein}g</span>
+                    <span class="macro-label">Protein</span>
+                    <span class="macro-goal">/ ${goals.protein}g</span>
+                </div>
+                <div class="macro-card carbs">
+                    <div class="macro-bar"><div class="macro-fill" style="width: ${Math.min(100, (totals.carbs / goals.carbs) * 100)}%"></div></div>
+                    <span class="macro-value">${totals.carbs}g</span>
+                    <span class="macro-label">Carbs</span>
+                    <span class="macro-goal">/ ${goals.carbs}g</span>
+                </div>
+                <div class="macro-card fats">
+                    <div class="macro-bar"><div class="macro-fill" style="width: ${Math.min(100, (totals.fats / goals.fats) * 100)}%"></div></div>
+                    <span class="macro-value">${totals.fats}g</span>
+                    <span class="macro-label">Fats</span>
+                    <span class="macro-goal">/ ${goals.fats}g</span>
+                </div>
+            `;
+
+            // Water
+            document.getElementById('waterSection').innerHTML = `
+                <h4><i class="fas fa-tint"></i> Water Intake</h4>
+                <div class="water-glasses">
+                    ${Array.from({ length: 10 }, (_, i) => `
+                        <button class="water-glass ${i < (entry.waterIntake || 0) ? 'filled' : ''}" data-glass="${i + 1}">
+                            <i class="fas fa-glass-water"></i>
+                        </button>
+                    `).join('')}
+                </div>
+                <span class="water-count">${entry.waterIntake || 0} / ${goals.water} glasses</span>
+            `;
+
+            // Meals
+            const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
+            document.getElementById('mealSections').innerHTML = mealTypes.map(type => {
+                const meal = meals.find(m => m.type === type) || { type, items: [] };
+                const icon = { Breakfast: 'fa-sun', Lunch: 'fa-cloud-sun', Dinner: 'fa-moon', Snacks: 'fa-cookie-bite' }[type];
+                const items = meal.items || [];
+                const mt = items.reduce((t, item) => ({
+                    calories: t.calories + (item.calories || 0),
+                    protein: t.protein + (item.protein || 0),
+                    carbs: t.carbs + (item.carbs || 0),
+                    fats: t.fats + (item.fats || 0)
+                }), { calories: 0, protein: 0, carbs: 0, fats: 0 });
+
+                return `
+                    <div class="meal-section" data-meal="${type}">
+                        <div class="meal-header">
+                            <i class="fas ${icon}"></i>
+                            <h4>${type}</h4>
+                            <span class="meal-total">${Math.round(mt.calories)} kcal</span>
+                        </div>
+                        ${items.length > 0 ? `
+                            <div class="meal-items">
+                                ${items.map((item, idx) => `
+                                    <div class="meal-item">
+                                        <span class="item-name">${item.name}</span>
+                                        <span class="item-macros">
+                                            <span>${item.calories} cal</span>
+                                            <span>${item.protein}g P</span>
+                                            <span>${item.carbs}g C</span>
+                                            <span>${item.fats}g F</span>
+                                        </span>
+                                        <button class="remove-food-btn" data-meal="${type}" data-idx="${idx}"><i class="fas fa-times"></i></button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '<p class="no-items">No items logged yet</p>'}
+                    </div>
+                `;
+            }).join('');
+
+            // Weekly Overview
+            renderWeeklyOverview();
+
+            // Re-attach dynamic handlers
+            attachDynamicHandlers();
+        }
+
+        function renderWeeklyOverview() {
+            const history = hormoCareApp.getDietHistory(7);
+            if (history.length === 0) {
+                document.getElementById('weeklyOverview').innerHTML = '';
+                return;
+            }
+            const goals = hormoCareApp.dailyGoals;
+
+            document.getElementById('weeklyOverview').innerHTML = `
+                <div class="history-section">
+                    <h4><i class="fas fa-chart-bar"></i> 7-Day Overview</h4>
+                    <div class="history-list">
+                        ${history.reverse().map(d => {
+                            const t = { calories: d.totalCalories || 0, protein: d.totalProtein || 0, carbs: d.totalCarbs || 0, fats: d.totalFats || 0 };
+                            return `
+                                <div class="history-item">
+                                    <span class="history-date">${hormoCareApp.formatDate(d.date)}</span>
+                                    <span class="history-badges">
+                                        <span class="badge">${t.calories} cal</span>
+                                        <span class="badge">${t.protein}g P</span>
+                                        <span class="badge">${t.carbs}g C</span>
+                                        <span class="badge">${t.fats}g F</span>
+                                        ${d.waterIntake ? `<span class="badge"><i class="fas fa-tint" style="color:var(--accent)"></i> ${d.waterIntake}</span>` : ''}
+                                    </span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function attachHandlers() {
+            // Date navigation
+            document.getElementById('dietDate').addEventListener('change', function () {
+                currentDate = this.value;
+                renderPage();
+            });
+            document.getElementById('dietPrevDay').addEventListener('click', () => {
+                const d = new Date(currentDate);
+                d.setDate(d.getDate() - 1);
+                currentDate = d.toISOString().split('T')[0];
+                document.getElementById('dietDate').value = currentDate;
+                renderPage();
+            });
+            document.getElementById('dietNextDay').addEventListener('click', () => {
+                const d = new Date(currentDate);
+                d.setDate(d.getDate() + 1);
+                const today = new Date().toISOString().split('T')[0];
+                if (d.toISOString().split('T')[0] <= today) {
+                    currentDate = d.toISOString().split('T')[0];
+                    document.getElementById('dietDate').value = currentDate;
+                    renderPage();
+                }
+            });
+
+            // Food search
+            let searchTimeout = null;
+            document.getElementById('foodSearchInput').addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+                const suggestions = document.getElementById('foodSuggestions');
+                searchTimeout = setTimeout(() => {
+                    const results = hormoCareApp.searchFood(this.value);
+                    if (results.length > 0) {
+                        suggestions.innerHTML = results.map(f => `
+                            <div class="food-suggestion" data-food='${JSON.stringify(f).replace(/'/g, "&#39;")}'>
+                                <span class="food-name">${f.name}</span>
+                                <span class="food-cal">${f.calories} cal | ${f.protein}g P | ${f.carbs}g C | ${f.fats}g F</span>
+                            </div>
+                        `).join('');
+                        suggestions.style.display = 'block';
+                        suggestions.querySelectorAll('.food-suggestion').forEach(s => {
+                            s.addEventListener('click', function () {
+                                addFood(JSON.parse(this.dataset.food.replace(/&#39;/g, "'")));
+                            });
+                        });
+                    } else if (this.value.length >= 2) {
+                        suggestions.innerHTML = '<div class="food-suggestion"><span class="food-name">No results. Try adding manually below.</span></div>';
+                        suggestions.style.display = 'block';
+                    } else {
+                        suggestions.style.display = 'none';
+                    }
+                }, 200);
+            });
+
+            document.getElementById('foodSearchInput').addEventListener('blur', () => {
+                setTimeout(() => { document.getElementById('foodSuggestions').style.display = 'none'; }, 200);
+            });
+
+            // Manual entry toggle
+            document.getElementById('toggleManualEntry').addEventListener('click', function () {
+                const panel = document.getElementById('manualFoodEntry');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                this.textContent = panel.style.display === 'none' ? '+ Add custom food manually' : '- Hide custom food form';
+            });
+
+            // Custom food add
+            document.getElementById('addCustomFoodBtn').addEventListener('click', () => {
+                const name = document.getElementById('customFoodName').value;
+                if (!name) { showMsg('Please enter a food name.', 'error'); return; }
+                addFood({
+                    name,
+                    calories: parseInt(document.getElementById('customCalories').value) || 0,
+                    protein: parseFloat(document.getElementById('customProtein').value) || 0,
+                    carbs: parseFloat(document.getElementById('customCarbs').value) || 0,
+                    fats: parseFloat(document.getElementById('customFats').value) || 0
+                });
+                document.getElementById('customFoodName').value = '';
+                document.getElementById('customCalories').value = '';
+                document.getElementById('customProtein').value = '';
+                document.getElementById('customCarbs').value = '';
+                document.getElementById('customFats').value = '';
+            });
+        }
+
+        function attachDynamicHandlers() {
+            // Water glasses
+            document.querySelectorAll('.water-glass').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const count = parseInt(this.dataset.glass);
+                    const entry = hormoCareApp.getDietEntry(currentDate) || { meals: [], waterIntake: 0 };
+                    entry.date = currentDate;
+                    entry.waterIntake = entry.waterIntake === count ? count - 1 : count;
+                    hormoCareApp.saveDietEntry(entry);
+                    renderPage();
+                });
+            });
+
+            // Remove food
+            document.querySelectorAll('.remove-food-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const entry = hormoCareApp.getDietEntry(currentDate);
+                    if (!entry) return;
+                    const meal = entry.meals?.find(m => m.type === this.dataset.meal);
+                    if (meal && meal.items) {
+                        meal.items.splice(parseInt(this.dataset.idx), 1);
+                        hormoCareApp.saveDietEntry(entry);
+                        renderPage();
+                    }
+                });
+            });
+        }
+
+        function addFood(food) {
+            const mealType = document.getElementById('mealTypeSelect').value;
+            const entry = hormoCareApp.getDietEntry(currentDate) || { meals: [], waterIntake: 0 };
+            entry.date = currentDate;
+            if (!entry.meals) entry.meals = [];
+
+            let meal = entry.meals.find(m => m.type === mealType);
+            if (!meal) {
+                meal = { type: mealType, items: [] };
+                entry.meals.push(meal);
+            }
+            meal.items.push({
+                name: food.name,
+                calories: Math.round(food.calories),
+                protein: Math.round(food.protein * 10) / 10,
+                carbs: Math.round(food.carbs * 10) / 10,
+                fats: Math.round(food.fats * 10) / 10
+            });
+
+            hormoCareApp.saveDietEntry(entry);
+            document.getElementById('foodSearchInput').value = '';
+            document.getElementById('foodSuggestions').style.display = 'none';
+            showMsg(`Added "${food.name}" to ${mealType}!`, 'success');
+            renderPage();
+        }
+
+        function showMsg(text, type) {
+            const el = document.getElementById('diet-msg');
+            if (el) {
+                el.innerHTML = `<div class="msg msg-${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}</div>`;
+                setTimeout(() => { el.innerHTML = ''; }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
