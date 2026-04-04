@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Consultation - HormoCare AI</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .consult-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .consult-option {
+            background: white;
+            border: 3px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .consult-option:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateY(-3px);
+        }
+        .consult-option.selected {
+            border-color: var(--primary);
+            background: rgba(255, 107, 157, 0.05);
+        }
+        .consult-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        .consult-option h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        .consult-option .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        .consult-option .features {
+            list-style: none;
+            text-align: left;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .consult-option .features li {
+            padding: 0.3rem 0;
+        }
+        .consult-option .features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+        .doctor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .doctor-card {
+            background: white;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .doctor-card:hover {
+            box-shadow: var(--shadow);
+        }
+        .doctor-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .doctor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+        .doctor-info {
+            flex: 1;
+        }
+        .doctor-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+        .doctor-specialty {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .doctor-experience {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .doctor-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .stars {
+            color: #FFD700;
+            font-size: 0.9rem;
+        }
+        .rating-count {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .doctor-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .doctor-languages {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .language-badge {
+            padding: 0.2rem 0.6rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+        }
+        .doctor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .doctor-actions .btn {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            font-size: 0.9rem;
+            justify-content: center;
+        }
+        .upload-section {
+            background: var(--bg-light);
+            border: 2px dashed #DDD;
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        .upload-section:hover {
+            border-color: var(--primary);
+        }
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        .upload-input {
+            display: none;
+        }
+        .uploaded-files {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid #E8E8E8;
+        }
+        .file-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        .file-info {
+            flex: 1;
+            text-align: left;
+        }
+        .file-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+        .file-size {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .remove-file-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.3rem;
+            transition: color 0.3s ease;
+        }
+        .remove-file-btn:hover {
+            color: var(--danger);
+        }
+        .booking-form {
+            background: white;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        .booking-form.active {
+            display: block;
+        }
+        .booking-form h4 {
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .time-slot {
+            padding: 0.7rem;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius-sm);
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .time-slot:hover {
+            border-color: var(--primary);
+        }
+        .time-slot.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .time-slot.unavailable {
+            opacity: 0.4;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+        .info-banner {
+            background: rgba(69, 183, 209, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.2rem;
+            border-radius: var(--radius-sm);
+            margin-bottom: 2rem;
+        }
+        .info-banner i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .consult-grid {
+                grid-template-columns: 1fr;
+            }
+            .doctor-list {
+                grid-template-columns: 1fr;
+            }
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HormoCare AI</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#app" class="nav-link">Tracker</a>
+                <a href="diet-tracker.html" class="nav-link">Diet</a>
+                <a href="doctor-consultation.html" class="nav-link diet-link active"><i class="fas fa-stethoscope"></i> Doctors</a>
+            </div>
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <a href="index.html#app" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+
+        <h2 class="section-title">Doctor Consultation</h2>
+        <p class="form-subtitle">Connect with experienced gynecologists specializing in PCOS and women's health</p>
+
+        <div class="info-banner">
+            <i class="fas fa-info-circle"></i>
+            <strong>Before your consultation:</strong> Upload your medical reports below and complete your symptom tracking for accurate diagnosis.
+        </div>
+
+        <!-- Consultation Type Selection -->
+        <div class="consult-grid">
+            <div class="consult-option active" data-type="voice">
+                <div class="consult-icon"><i class="fas fa-phone-alt"></i></div>
+                <h3>Voice Call</h3>
+                <p class="price">₹499</p>
+                <ul class="features">
+                    <li>15-30 minute consultation</li>
+                    <li>Symptom discussion</li>
+                    <li>Prescription if needed</li>
+                    <li>Follow-up via chat</li>
+                </ul>
+            </div>
+            <div class="consult-option" data-type="video">
+                <div class="consult-icon"><i class="fas fa-video"></i></div>
+                <h3>Video Call</h3>
+                <p class="price">₹699</p>
+                <ul class="features">
+                    <li>30-45 minute video session</li>
+                    <li>Visual examination</li>
+                    <li>Detailed discussion</li>
+                    <li>Digital prescription</li>
+                    <li>7-day follow-up access</li>
+                </ul>
+            </div>
+            <div class="consult-option" data-type="in-person">
+                <div class="consult-icon"><i class="fas fa-hospital"></i></div>
+                <h3>In-Person Visit</h3>
+                <p class="price">₹1,200</p>
+                <ul class="features">
+                    <li>Full clinical examination</li>
+                    <li>Ultrasound if needed</li>
+                    <li>Comprehensive care</li>
+                    <li>Lab test coordination</li>
+                    <li>Ongoing follow-ups</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Medical Reports Upload -->
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+            <h4>Upload Medical Reports (Optional)</h4>
+            <p style="color: var(--text-light); margin-bottom: 1rem;">Blood test results, ultrasound reports, previous prescriptions, etc.</p>
+            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-upload"></i> Choose Files
+            </button>
+            <input type="file" id="fileInput" class="upload-input" multiple accept=".pdf,.jpg,.jpeg,.png">
+            <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">Accepted formats: PDF, JPG, PNG (Max 10MB per file)</p>
+            <div class="uploaded-files" id="uploadedFiles"></div>
+        </div>
+
+        <!-- Available Doctors -->
+        <h3 style="text-align:center; color:var(--text-dark); margin-bottom:1.5rem;">Available Gynecologists</h3>
+        <div class="doctor-list">
+            <div class="doctor-card">
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-count">4.9 (287 reviews)</span>
+                        </div>
+                        <div class="doctor-name">Dr. Priya Sharma</div>
+                        <div class="doctor-specialty">PCOS & Fertility Specialist</div>
+                        <div class="doctor-experience">15 years experience</div>
+                    </div>
+                </div>
+                <p class="doctor-details">MBBS, MD (Obs & Gyn), Fellowship in Reproductive Medicine. Specializes in PCOS management, hormonal disorders, and women's health.</p>
+                <div class="doctor-languages">
+                    <span class="language-badge">English</span>
+                    <span class="language-badge">Hindi</span>
+                    <span class="language-badge">Marathi</span>
+                </div>
+                <div class="doctor-actions">
+                    <button class="btn btn-primary book-btn" data-doctor="Dr. Priya Sharma">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </button>
+                </div>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-count">4.8 (195 reviews)</span>
+                        </div>
+                        <div class="doctor-name">Dr. Anjali Mehta</div>
+                        <div class="doctor-specialty">Endocrinologist</div>
+                        <div class="doctor-experience">12 years experience</div>
+                    </div>
+                </div>
+                <p class="doctor-details">MBBS, MD (Endocrinology). Expert in hormonal imbalances, PCOS, thyroid disorders, and metabolic conditions.</p>
+                <div class="doctor-languages">
+                    <span class="language-badge">English</span>
+                    <span class="language-badge">Hindi</span>
+                    <span class="language-badge">Gujarati</span>
+                </div>
+                <div class="doctor-actions">
+                    <button class="btn btn-primary book-btn" data-doctor="Dr. Anjali Mehta">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </button>
+                </div>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-count">4.9 (342 reviews)</span>
+                        </div>
+                        <div class="doctor-name">Dr. Rajesh Kumar</div>
+                        <div class="doctor-specialty">Reproductive Health Expert</div>
+                        <div class="doctor-experience">18 years experience</div>
+                    </div>
+                </div>
+                <p class="doctor-details">MBBS, DNB (Obs & Gyn), Fellowship in IVF. Specializes in PCOS, infertility treatment, and reproductive endocrinology.</p>
+                <div class="doctor-languages">
+                    <span class="language-badge">English</span>
+                    <span class="language-badge">Hindi</span>
+                    <span class="language-badge">Tamil</span>
+                </div>
+                <div class="doctor-actions">
+                    <button class="btn btn-primary book-btn" data-doctor="Dr. Rajesh Kumar">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </button>
+                </div>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="rating-count">4.7 (156 reviews)</span>
+                        </div>
+                        <div class="doctor-name">Dr. Kavita Reddy</div>
+                        <div class="doctor-specialty">Women's Health Specialist</div>
+                        <div class="doctor-experience">10 years experience</div>
+                    </div>
+                </div>
+                <p class="doctor-details">MBBS, MS (Obs & Gyn). Focus on PCOS management, menstrual disorders, and lifestyle-based treatment approaches.</p>
+                <div class="doctor-languages">
+                    <span class="language-badge">English</span>
+                    <span class="language-badge">Hindi</span>
+                    <span class="language-badge">Telugu</span>
+                </div>
+                <div class="doctor-actions">
+                    <button class="btn btn-primary book-btn" data-doctor="Dr. Kavita Reddy">
+                        <i class="fas fa-calendar-check"></i> Book Appointment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Form (Hidden by default) -->
+        <div class="booking-form" id="bookingForm">
+            <h4><i class="fas fa-calendar-alt"></i> Book Your Consultation</h4>
+            <div class="form-group">
+                <label>Doctor</label>
+                <input type="text" id="selectedDoctor" readonly>
+            </div>
+            <div class="form-group">
+                <label>Consultation Type</label>
+                <input type="text" id="selectedType" readonly>
+            </div>
+            <div class="form-group">
+                <label>Preferred Date</label>
+                <input type="date" id="consultDate" min="">
+            </div>
+            <div class="form-group">
+                <label>Available Time Slots</label>
+                <div class="time-slots" id="timeSlots"></div>
+            </div>
+            <div class="form-group">
+                <label>Your Concerns (Optional)</label>
+                <textarea id="consultConcerns" rows="4" placeholder="Describe your symptoms and any specific concerns..."></textarea>
+            </div>
+            <div id="booking-msg" class="form-message"></div>
+            <div class="form-actions">
+                <button class="btn btn-primary" id="confirmBookingBtn">
+                    <i class="fas fa-check-circle"></i> Confirm Booking & Pay
+                </button>
+                <button class="btn btn-secondary" id="cancelBookingBtn">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        let selectedConsultType = 'voice';
+        let selectedDoctor = '';
+        let uploadedReports = [];
+        let selectedTimeSlot = '';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+
+            document.getElementById('consultDate').min = new Date().toISOString().split('T')[0];
+
+            document.querySelectorAll('.consult-option').forEach(opt => {
+                opt.addEventListener('click', function () {
+                    document.querySelectorAll('.consult-option').forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedConsultType = this.dataset.type;
+                });
+            });
+
+            document.querySelectorAll('.book-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    selectedDoctor = this.dataset.doctor;
+                    showBookingForm();
+                });
+            });
+
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+            document.getElementById('consultDate').addEventListener('change', function () {
+                generateTimeSlots();
+            });
+
+            document.getElementById('confirmBookingBtn').addEventListener('click', confirmBooking);
+            document.getElementById('cancelBookingBtn').addEventListener('click', () => {
+                document.getElementById('bookingForm').classList.remove('active');
+            });
+        });
+
+        function handleFileUpload(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`${file.name} exceeds 10MB limit`);
+                    return;
+                }
+                uploadedReports.push({
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(1) + ' KB',
+                    type: file.type,
+                    uploadDate: new Date().toISOString()
+                });
+            });
+            renderUploadedFiles();
+            saveReportsToStorage();
+        }
+
+        function renderUploadedFiles() {
+            const container = document.getElementById('uploadedFiles');
+            if (uploadedReports.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            container.innerHTML = uploadedReports.map((file, idx) => `
+                <div class="uploaded-file">
+                    <i class="fas fa-file-${file.type.includes('pdf') ? 'pdf' : 'image'} file-icon"></i>
+                    <div class="file-info">
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-size">${file.size}</div>
+                    </div>
+                    <button class="remove-file-btn" onclick="removeFile(${idx})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeFile(idx) {
+            uploadedReports.splice(idx, 1);
+            renderUploadedFiles();
+            saveReportsToStorage();
+        }
+
+        function saveReportsToStorage() {
+            localStorage.setItem('hormocare_reports', JSON.stringify(uploadedReports));
+        }
+
+        function loadReportsFromStorage() {
+            try {
+                const saved = localStorage.getItem('hormocare_reports');
+                if (saved) uploadedReports = JSON.parse(saved);
+                renderUploadedFiles();
+            } catch (e) {
+                console.error('Error loading reports:', e);
+            }
+        }
+
+        function showBookingForm() {
+            const typeLabels = { voice: 'Voice Call (₹499)', video: 'Video Call (₹699)', 'in-person': 'In-Person Visit (₹1,200)' };
+            document.getElementById('selectedDoctor').value = selectedDoctor;
+            document.getElementById('selectedType').value = typeLabels[selectedConsultType];
+            document.getElementById('bookingForm').classList.add('active');
+            document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
+            generateTimeSlots();
+        }
+
+        function generateTimeSlots() {
+            const slotsContainer = document.getElementById('timeSlots');
+            const slots = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM'];
+            const unavailable = ['11:00 AM', '03:00 PM'];
+
+            slotsContainer.innerHTML = slots.map(slot => {
+                const isUnavailable = unavailable.includes(slot);
+                return `<button class="time-slot ${isUnavailable ? 'unavailable' : ''}" data-slot="${slot}" ${isUnavailable ? 'disabled' : ''}>${slot}</button>`;
+            }).join('');
+
+            slotsContainer.querySelectorAll('.time-slot:not(.unavailable)').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    slotsContainer.querySelectorAll('.time-slot').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedTimeSlot = this.dataset.slot;
+                });
+            });
+        }
+
+        function confirmBooking() {
+            const date = document.getElementById('consultDate').value;
+            const concerns = document.getElementById('consultConcerns').value;
+
+            if (!date || !selectedTimeSlot) {
+                showMessage('Please select a date and time slot.', 'error');
+                return;
+            }
+
+            const booking = {
+                doctor: selectedDoctor,
+                type: selectedConsultType,
+                date,
+                time: selectedTimeSlot,
+                concerns,
+                reports: uploadedReports,
+                bookingDate: new Date().toISOString()
+            };
+
+            let bookings = [];
+            try {
+                bookings = JSON.parse(localStorage.getItem('hormocare_bookings') || '[]');
+            } catch (e) {}
+            bookings.push(booking);
+            localStorage.setItem('hormocare_bookings', JSON.stringify(bookings));
+
+            showMessage('Consultation booked successfully! You will receive a confirmation email shortly.', 'success');
+            setTimeout(() => {
+                window.location.href = 'index.html#app';
+            }, 2000);
+        }
+
+        function showMessage(text, type) {
+            const el = document.getElementById('booking-msg');
+            if (el) {
+                el.innerHTML = `<div class="msg msg-${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}</div>`;
+            }
+        }
+
+        loadReportsFromStorage();
+    </script>
+</body>
+</html>
