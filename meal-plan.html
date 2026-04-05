@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Meal Plan - HormoCare AI</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .plan-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .plan-type-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 280px;
+            padding: 2rem 1.5rem;
+            border: 3px solid #E8E8E8;
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        .plan-type-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        .plan-type-card.active {
+            border-color: var(--primary);
+            background: rgba(255, 107, 157, 0.05);
+        }
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .plan-type-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        .plan-type-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .week-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .day-card {
+            background: white;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .day-card.selected {
+            border-color: var(--primary);
+            background: rgba(255, 107, 157, 0.05);
+        }
+        .day-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        .day-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        .day-calories {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+        .meal-plan-section {
+            background: white;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .meal-plan-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #F0F0F0;
+        }
+        .meal-plan-header i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        .meal-plan-header h4 {
+            flex: 1;
+            font-size: 1.1rem;
+        }
+        .meal-plan-time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .meal-plan-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .meal-plan-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: var(--bg-light);
+            border-radius: var(--radius-sm);
+        }
+        .meal-plan-item i {
+            color: var(--success);
+            margin-top: 0.2rem;
+        }
+        .meal-item-content {
+            flex: 1;
+        }
+        .meal-item-content strong {
+            display: block;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+        .meal-item-content p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+        .meal-item-macros {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .tips-section {
+            background: rgba(46, 204, 113, 0.08);
+            border-left: 4px solid var(--success);
+            padding: 1.2rem;
+            border-radius: var(--radius-sm);
+            margin-top: 2rem;
+        }
+        .tips-section h4 {
+            color: var(--success);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tips-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        .tips-list li {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .tips-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+        @media (max-width: 768px) {
+            .week-calendar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .plan-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>HormoCare AI</span>
+            </a>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="index.html#features" class="nav-link">Features</a>
+                <a href="index.html#app" class="nav-link">Tracker</a>
+                <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
+                <a href="meal-plan.html" class="nav-link diet-link active"><i class="fas fa-calendar-week"></i> Meal Plan</a>
+            </div>
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <a href="index.html#app" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+
+        <h2 class="section-title">Weekly PCOS-Friendly Meal Plan</h2>
+        <p class="form-subtitle">Balanced, nutritious meal plans designed to manage PCOS symptoms. Low GI, anti-inflammatory, and rich in fiber.</p>
+
+        <!-- Plan Type Selector -->
+        <div class="plan-selector">
+            <div class="plan-type-card active" data-type="veg">
+                <div class="plan-icon">🥗</div>
+                <h3>Vegetarian</h3>
+                <p>100% plant-based meals with protein from legumes and dairy</p>
+            </div>
+            <div class="plan-type-card" data-type="non-veg">
+                <div class="plan-icon">🍗</div>
+                <h3>Non-Vegetarian</h3>
+                <p>Includes lean meats, fish, eggs along with vegetables</p>
+            </div>
+            <div class="plan-type-card" data-type="mixed">
+                <div class="plan-icon">🍽️</div>
+                <h3>Mixed / Flexitarian</h3>
+                <p>Best of both - variety of veg and non-veg options</p>
+            </div>
+        </div>
+
+        <!-- Week Calendar -->
+        <div class="week-calendar" id="weekCalendar"></div>
+
+        <!-- Daily Meal Plan -->
+        <div id="dailyMealPlan"></div>
+
+        <!-- PCOS Diet Tips -->
+        <div class="tips-section">
+            <h4><i class="fas fa-lightbulb"></i> PCOS Diet Tips</h4>
+            <ul class="tips-list">
+                <li>Choose low glycemic index (GI) foods to manage insulin levels</li>
+                <li>Include protein in every meal to stabilize blood sugar</li>
+                <li>Eat fiber-rich foods (vegetables, whole grains, legumes)</li>
+                <li>Limit refined carbs, sugary foods, and processed items</li>
+                <li>Stay hydrated with 8-10 glasses of water daily</li>
+                <li>Eat smaller, frequent meals rather than 2-3 large ones</li>
+                <li>Include anti-inflammatory foods (turmeric, berries, fatty fish, nuts)</li>
+            </ul>
+        </div>
+
+        <div class="form-actions" style="margin: 2rem 0 3rem;">
+            <a href="diet-tracker.html" class="btn btn-primary">
+                <i class="fas fa-utensils"></i> Track Today's Meals
+            </a>
+            <a href="medicine-store.html" class="btn btn-secondary">
+                <i class="fas fa-capsules"></i> Order Supplements
+            </a>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        const mealPlans = {
+            veg: {
+                monday: {
+                    breakfast: [{ name: 'Oats porridge with almonds & berries', cal: 320, desc: 'High fiber, low GI start to the day' }],
+                    lunch: [{ name: 'Brown rice with dal tadka', cal: 380 }, { name: 'Mixed vegetable sabzi', cal: 120 }, { name: 'Cucumber raita', cal: 75 }],
+                    snack: [{ name: 'Sprouts salad', cal: 130 }, { name: 'Green tea', cal: 2 }],
+                    dinner: [{ name: '2 Whole wheat rotis', cal: 240 }, { name: 'Paneer bhurji', cal: 200 }, { name: 'Palak sabzi', cal: 90 }]
+                },
+                tuesday: {
+                    breakfast: [{ name: '2 Idlis with sambar', cal: 180 }, { name: 'Coconut chutney', cal: 80 }],
+                    lunch: [{ name: 'Rajma with brown rice', cal: 450 }, { name: 'Mixed salad', cal: 45 }],
+                    snack: [{ name: 'Buttermilk', cal: 40 }, { name: 'Makhana roasted', cal: 105 }],
+                    dinner: [{ name: 'Vegetable khichdi', cal: 300 }, { name: 'Curd', cal: 98 }]
+                },
+                wednesday: {
+                    breakfast: [{ name: 'Poha with peanuts', cal: 250 }, { name: 'Lemon water', cal: 5 }],
+                    lunch: [{ name: 'Chole with 2 rotis', cal: 500 }, { name: 'Onion salad', cal: 30 }],
+                    snack: [{ name: 'Fruit bowl (apple, papaya, guava)', cal: 180 }],
+                    dinner: [{ name: 'Dosa (2) with sambar', cal: 336 }, { name: 'Coconut chutney', cal: 80 }]
+                },
+                thursday: {
+                    breakfast: [{ name: 'Upma with vegetables', cal: 210 }, { name: 'Coffee with milk', cal: 70 }],
+                    lunch: [{ name: 'Brown rice pulao', cal: 320 }, { name: 'Chana dal', cal: 269 }, { name: 'Curd', cal: 98 }],
+                    snack: [{ name: 'Roasted chana', cal: 140 }, { name: 'Green tea', cal: 2 }],
+                    dinner: [{ name: '3 Rotis', cal: 360 }, { name: 'Mixed dal', cal: 198 }, { name: 'Bhindi sabzi', cal: 80 }]
+                },
+                friday: {
+                    breakfast: [{ name: 'Besan chilla (2)', cal: 240 }, { name: 'Green chutney', cal: 30 }],
+                    lunch: [{ name: 'Quinoa pulao', cal: 350 }, { name: 'Paneer curry', cal: 280 }],
+                    snack: [{ name: 'Walnuts & almonds', cal: 150 }],
+                    dinner: [{ name: 'Vegetable soup', cal: 100 }, { name: 'Grilled paneer sandwich (whole wheat)', cal: 320 }]
+                },
+                saturday: {
+                    breakfast: [{ name: 'Omelette (egg substitute: besan)', cal: 180 }, { name: 'Whole wheat toast', cal: 164 }],
+                    lunch: [{ name: 'Veg biryani (brown rice)', cal: 380 }, { name: 'Raita', cal: 75 }],
+                    snack: [{ name: 'Smoothie (banana, spinach, curd)', cal: 220 }],
+                    dinner: [{ name: 'Moong dal khichdi', cal: 280 }, { name: 'Roasted papad', cal: 60 }]
+                },
+                sunday: {
+                    breakfast: [{ name: 'Masala dosa', cal: 240 }, { name: 'Sambar', cal: 90 }],
+                    lunch: [{ name: 'Veg thali special', cal: 700, desc: 'Dal, sabzi, roti, rice, salad, curd' }],
+                    snack: [{ name: 'Fruit chaat', cal: 150 }],
+                    dinner: [{ name: 'Palak paneer', cal: 250 }, { name: '2 Rotis', cal: 240 }]
+                }
+            },
+            'non-veg': {
+                monday: {
+                    breakfast: [{ name: '2 Boiled eggs', cal: 156 }, { name: 'Whole wheat toast', cal: 164 }],
+                    lunch: [{ name: 'Grilled chicken breast', cal: 165 }, { name: 'Brown rice', cal: 216 }, { name: 'Mixed salad', cal: 45 }],
+                    snack: [{ name: 'Greek yogurt with berries', cal: 150 }],
+                    dinner: [{ name: 'Fish curry', cal: 200 }, { name: '2 Rotis', cal: 240 }]
+                },
+                tuesday: {
+                    breakfast: [{ name: 'Egg omelette (2 eggs)', cal: 190 }, { name: 'Sautéed vegetables', cal: 80 }],
+                    lunch: [{ name: 'Chicken curry', cal: 240 }, { name: 'Brown rice', cal: 216 }, { name: 'Dal', cal: 198 }],
+                    snack: [{ name: 'Boiled egg', cal: 78 }, { name: 'Almonds', cal: 69 }],
+                    dinner: [{ name: 'Grilled fish', cal: 136 }, { name: 'Vegetable soup', cal: 100 }, { name: 'Salad', cal: 45 }]
+                },
+                wednesday: {
+                    breakfast: [{ name: 'Scrambled eggs with spinach', cal: 210 }, { name: 'Brown bread', cal: 164 }],
+                    lunch: [{ name: 'Chicken biryani', cal: 490 }, { name: 'Raita', cal: 75 }],
+                    snack: [{ name: 'Tuna salad', cal: 180 }],
+                    dinner: [{ name: 'Egg curry', cal: 220 }, { name: '2 Rotis', cal: 240 }]
+                },
+                thursday: {
+                    breakfast: [{ name: 'Egg bhurji', cal: 200 }, { name: 'Whole wheat paratha', cal: 230 }],
+                    lunch: [{ name: 'Mutton curry (lean)', cal: 280 }, { name: 'Brown rice', cal: 216 }, { name: 'Salad', cal: 45 }],
+                    snack: [{ name: 'Chicken soup', cal: 120 }],
+                    dinner: [{ name: 'Grilled chicken breast', cal: 165 }, { name: 'Sautéed vegetables', cal: 120 }]
+                },
+                friday: {
+                    breakfast: [{ name: 'Boiled eggs (2)', cal: 156 }, { name: 'Oats porridge', cal: 166 }],
+                    lunch: [{ name: 'Fish tandoori', cal: 180 }, { name: 'Quinoa pulao', cal: 350 }],
+                    snack: [{ name: 'Hard boiled egg', cal: 78 }, { name: 'Cucumber sticks', cal: 20 }],
+                    dinner: [{ name: 'Chicken stir-fry', cal: 250 }, { name: 'Brown rice', cal: 216 }]
+                },
+                saturday: {
+                    breakfast: [{ name: 'Egg dosa', cal: 220 }, { name: 'Coconut chutney', cal: 80 }],
+                    lunch: [{ name: 'Chicken tikka', cal: 200 }, { name: 'Dal', cal: 198 }, { name: 'Roti', cal: 240 }],
+                    snack: [{ name: 'Protein smoothie', cal: 200 }],
+                    dinner: [{ name: 'Grilled fish', cal: 136 }, { name: 'Mixed vegetables', cal: 120 }]
+                },
+                sunday: {
+                    breakfast: [{ name: 'Egg curry', cal: 220 }, { name: '2 Parathas', cal: 460 }],
+                    lunch: [{ name: 'Chicken biryani', cal: 490 }, { name: 'Raita', cal: 75 }],
+                    snack: [{ name: 'Grilled chicken wings', cal: 180 }],
+                    dinner: [{ name: 'Fish fry', cal: 200 }, { name: 'Vegetable soup', cal: 100 }]
+                }
+            },
+            mixed: {
+                monday: {
+                    breakfast: [{ name: '2 Boiled eggs', cal: 156 }, { name: 'Oats porridge', cal: 166 }],
+                    lunch: [{ name: 'Dal with brown rice', cal: 414 }, { name: 'Mixed vegetables', cal: 120 }],
+                    snack: [{ name: 'Sprouts salad', cal: 130 }],
+                    dinner: [{ name: 'Paneer tikka', cal: 220 }, { name: '2 Rotis', cal: 240 }]
+                },
+                tuesday: {
+                    breakfast: [{ name: 'Poha with peanuts', cal: 250 }, { name: 'Green tea', cal: 2 }],
+                    lunch: [{ name: 'Grilled chicken breast', cal: 165 }, { name: 'Quinoa', cal: 222 }, { name: 'Salad', cal: 45 }],
+                    snack: [{ name: 'Greek yogurt', cal: 100 }, { name: 'Berries', cal: 60 }],
+                    dinner: [{ name: 'Vegetable khichdi', cal: 300 }, { name: 'Curd', cal: 98 }]
+                },
+                wednesday: {
+                    breakfast: [{ name: 'Idli (3) with sambar', cal: 195 }, { name: 'Coconut chutney', cal: 80 }],
+                    lunch: [{ name: 'Fish curry', cal: 200 }, { name: 'Brown rice', cal: 216 }, { name: 'Palak sabzi', cal: 90 }],
+                    snack: [{ name: 'Roasted makhana', cal: 105 }, { name: 'Buttermilk', cal: 40 }],
+                    dinner: [{ name: 'Chole', cal: 269 }, { name: '2 Rotis', cal: 240 }]
+                },
+                thursday: {
+                    breakfast: [{ name: 'Egg omelette', cal: 190 }, { name: 'Whole wheat toast', cal: 164 }],
+                    lunch: [{ name: 'Rajma with rice', cal: 441 }, { name: 'Cucumber raita', cal: 75 }],
+                    snack: [{ name: 'Almonds & walnuts', cal: 140 }],
+                    dinner: [{ name: 'Grilled chicken', cal: 165 }, { name: 'Vegetable soup', cal: 100 }]
+                },
+                friday: {
+                    breakfast: [{ name: 'Upma with vegetables', cal: 210 }, { name: 'Coffee', cal: 70 }],
+                    lunch: [{ name: 'Paneer curry', cal: 280 }, { name: 'Brown rice', cal: 216 }, { name: 'Dal', cal: 198 }],
+                    snack: [{ name: 'Boiled egg', cal: 78 }, { name: 'Carrot sticks', cal: 30 }],
+                    dinner: [{ name: 'Fish grilled', cal: 136 }, { name: 'Mixed vegetable sabzi', cal: 120 }, { name: 'Roti', cal: 120 }]
+                },
+                saturday: {
+                    breakfast: [{ name: 'Dosa (2) with chutney', cal: 416 }],
+                    lunch: [{ name: 'Chicken biryani', cal: 490 }, { name: 'Raita', cal: 75 }],
+                    snack: [{ name: 'Fruit bowl', cal: 150 }],
+                    dinner: [{ name: 'Vegetable khichdi', cal: 300 }, { name: 'Paneer salad', cal: 180 }]
+                },
+                sunday: {
+                    breakfast: [{ name: 'Scrambled eggs', cal: 200 }, { name: 'Whole wheat paratha', cal: 230 }],
+                    lunch: [{ name: 'Veg thali', cal: 700 }],
+                    snack: [{ name: 'Smoothie with protein', cal: 220 }],
+                    dinner: [{ name: 'Grilled fish', cal: 136 }, { name: 'Roasted vegetables', cal: 120 }]
+                }
+            }
+        };
+
+        let selectedPlanType = 'veg';
+        let selectedDay = 'monday';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+            }
+
+            document.querySelectorAll('.plan-type-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    document.querySelectorAll('.plan-type-card').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedPlanType = this.dataset.type;
+                    renderWeek();
+                    renderDayPlan();
+                });
+            });
+
+            renderWeek();
+            renderDayPlan();
+        });
+
+        function renderWeek() {
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+
+            document.getElementById('weekCalendar').innerHTML = days.map((day, i) => {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const totalCal = calculateDayCalories(mealPlans[selectedPlanType][day]);
+                return `
+                    <div class="day-card ${day === selectedDay ? 'selected' : ''}" data-day="${day}">
+                        <div class="day-name">${dayNames[i]}</div>
+                        <div class="day-date">${date.getDate()}/${date.getMonth() + 1}</div>
+                        <div class="day-calories">${totalCal} cal</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    document.querySelectorAll('.day-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedDay = this.dataset.day;
+                    renderDayPlan();
+                });
+            });
+        }
+
+        function calculateDayCalories(dayPlan) {
+            let total = 0;
+            ['breakfast', 'lunch', 'snack', 'dinner'].forEach(meal => {
+                (dayPlan[meal] || []).forEach(item => total += item.cal);
+            });
+            return total;
+        }
+
+        function renderDayPlan() {
+            const dayPlan = mealPlans[selectedPlanType][selectedDay];
+            const mealInfo = {
+                breakfast: { icon: 'fa-sun', time: '7:00 - 9:00 AM' },
+                lunch: { icon: 'fa-cloud-sun', time: '12:00 - 2:00 PM' },
+                snack: { icon: 'fa-cookie-bite', time: '4:00 - 5:00 PM' },
+                dinner: { icon: 'fa-moon', time: '7:00 - 9:00 PM' }
+            };
+
+            document.getElementById('dailyMealPlan').innerHTML = `
+                <h3 style="text-align:center; color:var(--text-dark); margin-bottom:1.5rem; text-transform:capitalize;">
+                    ${selectedDay}'s Meal Plan <span style="color:var(--primary);">(${selectedPlanType === 'non-veg' ? 'Non-Veg' : selectedPlanType === 'mixed' ? 'Mixed' : 'Vegetarian'})</span>
+                </h3>
+                ${Object.keys(mealInfo).map(meal => {
+                    const items = dayPlan[meal] || [];
+                    const total = items.reduce((sum, item) => sum + item.cal, 0);
+                    return `
+                        <div class="meal-plan-section">
+                            <div class="meal-plan-header">
+                                <i class="fas ${mealInfo[meal].icon}"></i>
+                                <h4>${meal.charAt(0).toUpperCase() + meal.slice(1)}</h4>
+                                <span class="meal-plan-time">${mealInfo[meal].time}</span>
+                                <span class="meal-item-macros">${total} cal</span>
+                            </div>
+                            <div class="meal-plan-items">
+                                ${items.map(item => `
+                                    <div class="meal-plan-item">
+                                        <i class="fas fa-check-circle"></i>
+                                        <div class="meal-item-content">
+                                            <strong>${item.name}</strong>
+                                            ${item.desc ? `<p>${item.desc}</p>` : ''}
+                                        </div>
+                                        <span class="meal-item-macros">${item.cal} cal</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+                <div class="meal-plan-section" style="background: rgba(255, 107, 157, 0.05); border-color: var(--primary);">
+                    <div class="meal-plan-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h4>Daily Total</h4>
+                        <span class="meal-item-macros" style="font-size:1.2rem;">${calculateDayCalories(dayPlan)} calories</span>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
