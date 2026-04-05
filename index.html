@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HormoCare AI - Early PCOS Risk Detection for Indian Women</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo" style="text-decoration:none">
+                <i class="fas fa-heartbeat"></i>
+                <span>HormoCare AI</span>
+            </a>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About PCOS</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#app" class="nav-link">Get Started</a>
+                <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                <a href="doctor-consultation.html" class="nav-link">Doctors</a>
+                <a href="medicine-store.html" class="nav-link">Store</a>
+                <a href="reviews.html" class="nav-link diet-link"><i class="fas fa-star"></i> Reviews</a>
+            </div>
+            <button class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Early PCOS Detection<br>
+                    <span class="gradient-text">Powered by AI</span>
+                </h1>
+                <p class="hero-subtitle">
+                    1 in 5 Indian women suffers from PCOS. Many cases go undiagnosed for years.
+                    HormoCare AI helps detect early warning signs through smart symptom tracking.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">20%</span>
+                        <span class="stat-label">of Indian women have PCOS</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">70%</span>
+                        <span class="stat-label">cases go undiagnosed</span>
+                    </div>
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="startAssessment()">
+                        <i class="fas fa-play"></i>
+                        Start Free Assessment
+                    </button>
+                    <button class="btn btn-secondary" onclick="learnMore()">
+                        <i class="fas fa-info-circle"></i>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="app-mockup">
+                    <div class="phone-frame">
+                        <div class="screen">
+                            <div class="app-preview">
+                                <div class="preview-header">
+                                    <div class="preview-logo">🌸</div>
+                                    <h3>HormoCare AI</h3>
+                                </div>
+                                <div class="risk-indicator">
+                                    <div class="risk-circle low-risk">
+                                        <span>Low Risk</span>
+                                        <div class="score">15%</div>
+                                    </div>
+                                </div>
+                                <div class="preview-features">
+                                    <div class="feature-item">📊 Cycle Tracking</div>
+                                    <div class="feature-item">🎯 Risk Analysis</div>
+                                    <div class="feature-item">💡 Smart Insights</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section id="about" class="problem-section">
+        <div class="container">
+            <h2 class="section-title">The Hidden Health Crisis</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Delayed Diagnosis</h3>
+                    <p>Women wait 2-3 years on average before getting a proper PCOS diagnosis, leading to complications.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>Poor Tracking</h3>
+                    <p>Irregular periods are often ignored. Most women don't track symptoms systematically.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⚕️</div>
+                    <h3>Limited Tools</h3>
+                    <p>No simple early risk screening tool specifically designed for Indian women's health patterns.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🚨</div>
+                    <h3>Serious Consequences</h3>
+                    <p>Untreated PCOS leads to infertility, obesity, diabetes, and cardiovascular disease.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">How HormoCare AI Works</h2>
+            <div class="features-grid">
+                <div class="feature-category">
+                    <h3><i class="fas fa-chart-line"></i> Smart Tracking</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">📅 Menstrual cycle patterns</div>
+                        <div class="feature-item">⚖️ Weight changes & BMI</div>
+                        <div class="feature-item">🔴 Acne severity levels</div>
+                        <div class="feature-item">💇‍♀️ Hair fall patterns</div>
+                        <div class="feature-item">😊 Mood swings tracking</div>
+                        <div class="feature-item">💤 Sleep quality patterns</div>
+                    </div>
+                </div>
+                <div class="feature-category">
+                    <h3><i class="fas fa-brain"></i> AI Analysis</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">🎯 PCOS Risk Score (0-100%)</div>
+                        <div class="feature-item">⚖️ Hormonal imbalance likelihood</div>
+                        <div class="feature-item">📈 Lifestyle risk patterns</div>
+                        <div class="feature-item">🔍 Early warning alerts</div>
+                        <div class="feature-item">📊 Trend analysis & graphs</div>
+                        <div class="feature-item">🏥 Doctor consultation timing</div>
+                    </div>
+                </div>
+                <div class="feature-category">
+                    <h3><i class="fas fa-lightbulb"></i> Personalized Care</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">🥗 PCOS-friendly meal plans</div>
+                        <div class="feature-item">🏃‍♀️ Customized exercise routines</div>
+                        <div class="feature-item">💊 Supplement store & delivery</div>
+                        <div class="feature-item">👩‍⚕️ Doctor consultation booking</div>
+                        <div class="feature-item">📄 Medical report upload</div>
+                        <div class="feature-item">⭐ Community reviews</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Demo Section -->
+    <section id="app" class="demo-section">
+        <div class="container">
+            <h2 class="section-title">Start Your Health Journey</h2>
+            <div class="demo-container">
+                <div class="demo-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <h3>Profile Setup</h3>
+                        <p>Enter basic health information</p>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <h3>Daily Tracking</h3>
+                        <p>Log symptoms and patterns</p>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <h3>AI Analysis</h3>
+                        <p>Get your risk assessment</p>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <h3>Personalized Care</h3>
+                        <p>Follow recommendations</p>
+                    </div>
+                    <div class="step" data-step="5">
+                        <div class="step-number">5</div>
+                        <h3>Diet Tracker</h3>
+                        <p>Track nutrition & meals</p>
+                    </div>
+                </div>
+                <div class="demo-content">
+                    <div class="app-interface" id="app-interface">
+                        <!-- Dynamic content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>HormoCare AI</span>
+                    </div>
+                    <p>Empowering women with early PCOS detection through AI-powered health insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About PCOS</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#app">Get Started</a></li>
+                        <li><a href="diet-tracker.html">Diet Tracker</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Health Resources</h4>
+                    <ul>
+                        <li><a href="meal-plan.html">Weekly Meal Plans</a></li>
+                        <li><a href="doctor-consultation.html">Consult Doctors</a></li>
+                        <li><a href="medicine-store.html">Buy Supplements</a></li>
+                        <li><a href="reviews.html">User Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-envelope"></i> support@hormocare.ai</p>
+                    <p><i class="fas fa-phone"></i> 1800-HORMOCARE</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 HormoCare AI. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+                <p class="disclaimer">This app is for educational purposes only and does not replace professional medical advice.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
