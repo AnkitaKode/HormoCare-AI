@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HormoCare AI - Pitch Presentation</title>
+    <link rel="stylesheet" href="styles/presentation.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Navigation -->
+        <nav class="slide-nav">
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">7</span>
+            </div>
+            <div class="nav-controls">
+                <button class="nav-btn" id="prev-btn" onclick="previousSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn" id="next-btn" onclick="nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Slide 1: Problem Statement -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">The Hidden Health Crisis</h1>
+                    <p class="slide-subtitle">PCOS affects 1 in 5 Indian women, yet most cases go undiagnosed</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card critical">
+                        <div class="stat-number">20%</div>
+                        <div class="stat-label">of Indian women have PCOS</div>
+                        <div class="stat-detail">That's over 100 million women</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-number">70%</div>
+                        <div class="stat-label">cases go undiagnosed</div>
+                        <div class="stat-detail">Average diagnosis delay: 2-3 years</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-number">50%</div>
+                        <div class="stat-label">develop diabetes</div>
+                        <div class="stat-detail">Without proper management</div>
+                    </div>
+                </div>
+                <div class="problem-points">
+                    <div class="problem-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Irregular periods are often ignored or normalized</span>
+                    </div>
+                    <div class="problem-item">
+                        <i class="fas fa-clock"></i>
+                        <span>No systematic symptom tracking by most women</span>
+                    </div>
+                    <div class="problem-item">
+                        <i class="fas fa-search"></i>
+                        <span>No early risk screening tools for Indian population</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Why Current Apps Fail -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Why Current Solutions Fall Short</h1>
+                    <p class="slide-subtitle">Generic period trackers miss the bigger picture</p>
+                </div>
+                <div class="comparison-grid">
+                    <div class="current-apps">
+                        <h3><i class="fas fa-times-circle"></i> Existing Apps</h3>
+                        <div class="app-issues">
+                            <div class="issue-item">
+                                <span class="issue-icon">📱</span>
+                                <div>
+                                    <strong>Generic Period Trackers</strong>
+                                    <p>Only track menstrual cycles, miss hormonal symptoms</p>
+                                </div>
+                            </div>
+                            <div class="issue-item">
+                                <span class="issue-icon">📊</span>
+                                <div>
+                                    <strong>No Risk Assessment</strong>
+                                    <p>Don't analyze patterns or provide early warnings</p>
+                                </div>
+                            </div>
+                            <div class="issue-item">
+                                <span class="issue-icon">🌍</span>
+                                <div>
+                                    <strong>Not India-Specific</strong>
+                                    <p>Don't consider Indian dietary patterns, genetics, lifestyle</p>
+                                </div>
+                            </div>
+                            <div class="issue-item">
+                                <span class="issue-icon">🤖</span>
+                                <div>
+                                    <strong>No Intelligence</strong>
+                                    <p>Simple logging without predictive insights</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="market-gap">
+                        <h3><i class="fas fa-lightbulb"></i> The Gap</h3>
+                        <div class="gap-content">
+                            <div class="gap-stat">
+                                <div class="gap-number">0</div>
+                                <div class="gap-text">AI-powered PCOS risk assessment tools for Indian women</div>
+                            </div>
+                            <div class="opportunity">
+                                <h4>🎯 The Opportunity</h4>
+                                <ul>
+                                    <li>100M+ potential users in India alone</li>
+                                    <li>Growing health awareness among young women</li>
+                                    <li>Increasing smartphone penetration (750M+ users)</li>
+                                    <li>Government push for digital health solutions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Our Innovation -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Introducing HormoCare AI</h1>
+                    <p class="slide-subtitle">AI-Powered Early PCOS Detection & Personalized Care</p>
+                </div>
+                <div class="innovation-showcase">
+                    <div class="innovation-features">
+                        <div class="feature-category">
+                            <h3><i class="fas fa-brain"></i> Smart AI Engine</h3>
+                            <ul>
+                                <li>Rule-based AI analyzing 15+ symptoms</li>
+                                <li>Personalized PCOS risk scoring (0-100%)</li>
+                                <li>Pattern recognition across menstrual cycles</li>
+                                <li>Predictive insights for early intervention</li>
+                            </ul>
+                        </div>
+                        <div class="feature-category">
+                            <h3><i class="fas fa-chart-line"></i> Comprehensive Tracking</h3>
+                            <ul>
+                                <li>Menstrual cycle patterns</li>
+                                <li>Weight & BMI monitoring</li>
+                                <li>Acne severity assessment</li>
+                                <li>Hair fall & hirsutism tracking</li>
+                                <li>Mood & sleep quality analysis</li>
+                            </ul>
+                        </div>
+                        <div class="feature-category">
+                            <h3><i class="fas fa-user-md"></i> Personalized Care</h3>
+                            <ul>
+                                <li>Custom diet plans for PCOS</li>
+                                <li>Targeted exercise recommendations</li>
+                                <li>Supplement guidance (Myo-inositol, Vit D)</li>
+                                <li>Doctor consultation timing alerts</li>
+                                <li>Nearby gynecologist finder</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="innovation-visual">
+                        <div class="ai-flow">
+                            <div class="flow-step">
+                                <div class="step-icon">📊</div>
+                                <div class="step-title">Data Collection</div>
+                                <div class="step-desc">Multi-parameter symptom tracking</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="step-icon">🧠</div>
+                                <div class="step-title">AI Analysis</div>
+                                <div class="step-desc">Risk calculation & pattern detection</div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="step-icon">💡</div>
+                                <div class="step-title">Insights</div>
+                                <div class="step-desc">Personalized recommendations</div>
+                            </div>
+                        </div>
+                        <div class="risk-demo">
+                            <div class="demo-screen">
+                                <div class="screen-header">HormoCare AI Risk Assessment</div>
+                                <div class="risk-circle moderate">
+                                    <span class="risk-percentage">65%</span>
+                                    <span class="risk-label">Moderate Risk</span>
+                                </div>
+                                <div class="key-indicators">
+                                    <div class="indicator high">🔴 Irregular cycles</div>
+                                    <div class="indicator medium">🟡 Weight gain pattern</div>
+                                    <div class="indicator medium">🟡 Hormonal symptoms</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Live Demo -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Live Demo</h1>
+                    <p class="slide-subtitle">See HormoCare AI in action</p>
+                </div>
+                <div class="demo-container">
+                    <div class="demo-phone">
+                        <div class="phone-screen">
+                            <iframe src="index.html#app" width="100%" height="100%" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                    <div class="demo-highlights">
+                        <h3>Key Features Demonstrated</h3>
+                        <div class="demo-feature">
+                            <i class="fas fa-user-plus"></i>
+                            <div>
+                                <strong>Quick Profile Setup</strong>
+                                <p>Age, weight, height, family history in under 2 minutes</p>
+                            </div>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>
+                                <strong>Intuitive Symptom Logging</strong>
+                                <p>Daily tracking with simple, visual interfaces</p>
+                            </div>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <strong>Instant AI Analysis</strong>
+                                <p>Real-time risk calculation and trend analysis</p>
+                            </div>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>Actionable Recommendations</strong>
+                                <p>Personalized diet, exercise, and medical guidance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Impact & Market Potential -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Transformative Impact</h1>
+                    <p class="slide-subtitle">Preventing health complications through early detection</p>
+                </div>
+                <div class="impact-grid">
+                    <div class="impact-section">
+                        <h3><i class="fas fa-heartbeat"></i> Health Impact</h3>
+                        <div class="impact-stats">
+                            <div class="impact-item">
+                                <div class="impact-number">50%</div>
+                                <div class="impact-text">Reduction in diagnosis delay</div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-number">30%</div>
+                                <div class="impact-text">Fewer diabetes cases</div>
+                            </div>
+                            <div class="impact-item">
+                                <div class="impact-number">40%</div>
+                                <div class="impact-text">Improved fertility outcomes</div>
+                            </div>
+                        </div>
+                        <div class="health-benefits">
+                            <p>✓ Early intervention prevents complications</p>
+                            <p>✓ Reduced healthcare costs</p>
+                            <p>✓ Better quality of life</p>
+                            <p>✓ Informed health decisions</p>
+                        </div>
+                    </div>
+                    <div class="market-section">
+                        <h3><i class="fas fa-chart-growth"></i> Market Opportunity</h3>
+                        <div class="market-size">
+                            <div class="tam">
+                                <div class="market-label">Total Addressable Market</div>
+                                <div class="market-value">$2.1B</div>
+                                <div class="market-desc">Women's health apps globally</div>
+                            </div>
+                            <div class="sam">
+                                <div class="market-label">Serviceable Available Market</div>
+                                <div class="market-value">$340M</div>
+                                <div class="market-desc">Indian women's health market</div>
+                            </div>
+                            <div class="som">
+                                <div class="market-label">Serviceable Obtainable Market</div>
+                                <div class="market-value">$34M</div>
+                                <div class="market-desc">PCOS-specific solutions (10%)</div>
+                            </div>
+                        </div>
+                        <div class="growth-drivers">
+                            <p>📈 26% CAGR in women's health apps</p>
+                            <p>🏥 Government digitization push</p>
+                            <p>💡 Rising health awareness</p>
+                            <p>📱 Smartphone penetration growth</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Business Model & Future Scope -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Sustainable Business Model</h1>
+                    <p class="slide-subtitle">Multiple revenue streams for long-term growth</p>
+                </div>
+                <div class="business-content">
+                    <div class="revenue-streams">
+                        <h3><i class="fas fa-money-bill-wave"></i> Revenue Model</h3>
+                        <div class="revenue-item">
+                            <div class="revenue-type">Freemium Subscriptions</div>
+                            <div class="revenue-desc">₹199/month for advanced AI analysis & personalized plans</div>
+                            <div class="revenue-potential">Potential: ₹50 Cr annually (250K users)</div>
+                        </div>
+                        <div class="revenue-item">
+                            <div class="revenue-type">Healthcare Partnerships</div>
+                            <div class="revenue-desc">Commission from doctor consultations & lab tests</div>
+                            <div class="revenue-potential">Potential: ₹20 Cr annually</div>
+                        </div>
+                        <div class="revenue-item">
+                            <div class="revenue-type">Pharmacy Integration</div>
+                            <div class="revenue-desc">Supplement & medication recommendations</div>
+                            <div class="revenue-potential">Potential: ₹15 Cr annually</div>
+                        </div>
+                        <div class="revenue-item">
+                            <div class="revenue-type">Corporate Wellness</div>
+                            <div class="revenue-desc">Enterprise health screening programs</div>
+                            <div class="revenue-potential">Potential: ₹10 Cr annually</div>
+                        </div>
+                    </div>
+                    <div class="future-roadmap">
+                        <h3><i class="fas fa-rocket"></i> Future Expansion</h3>
+                        <div class="roadmap-phase">
+                            <div class="phase-title">Phase 1: MVP (3-6 months)</div>
+                            <ul>
+                                <li>Basic app with AI risk assessment</li>
+                                <li>Symptom tracking & recommendations</li>
+                                <li>10K users, ₹5 Cr valuation</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-phase">
+                            <div class="phase-title">Phase 2: Scale (6-12 months)</div>
+                            <ul>
+                                <li>Doctor network integration</li>
+                                <li>Lab test partnerships</li>
+                                <li>100K users, ₹25 Cr valuation</li>
+                            </ul>
+                        </div>
+                        <div class="roadmap-phase">
+                            <div class="phase-title">Phase 3: Expand (12-24 months)</div>
+                            <ul>
+                                <li>Telemedicine platform</li>
+                                <li>Pharmacy delivery integration</li>
+                                <li>500K users, ₹100 Cr valuation</li>
+                            </ul>
+                        </div>
+                        <div class="international">
+                            <h4>🌏 International Expansion</h4>
+                            <p>Southeast Asia, Middle East markets with similar PCOS prevalence</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Call to Action -->
+        <div class="slide" id="slide-7">
+            <div class="slide-content">
+                <div class="slide-header">
+                    <h1 class="slide-title">Join the Revolution</h1>
+                    <p class="slide-subtitle">Be part of transforming women's healthcare in India</p>
+                </div>
+                <div class="cta-content">
+                    <div class="vision-statement">
+                        <h2>Our Vision</h2>
+                        <p class="vision-text">
+                            "No woman should suffer in silence from undiagnosed PCOS. 
+                            Through AI-powered early detection, we're building a future where 
+                            every Indian woman has access to personalized, preventive healthcare."
+                        </p>
+                    </div>
+                    <div class="next-steps">
+                        <h3>What We Need</h3>
+                        <div class="needs-grid">
+                            <div class="need-item">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <strong>Team Expansion</strong>
+                                    <p>Mobile developers, AI engineers, medical advisors</p>
+                                </div>
+                            </div>
+                            <div class="need-item">
+                                <i class="fas fa-rupee-sign"></i>
+                                <div>
+                                    <strong>Seed Funding</strong>
+                                    <p>₹2 Cr for 18-month runway and market validation</p>
+                                </div>
+                            </div>
+                            <div class="need-item">
+                                <i class="fas fa-handshake"></i>
+                                <div>
+                                    <strong>Strategic Partnerships</strong>
+                                    <p>Healthcare providers, labs, pharmacy chains</p>
+                                </div>
+                            </div>
+                            <div class="need-item">
+                                <i class="fas fa-certificate"></i>
+                                <div>
+                                    <strong>Regulatory Approval</strong>
+                                    <p>Medical device certification and data compliance</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-info">
+                        <h3>Let's Connect</h3>
+                        <div class="contact-details">
+                            <p><i class="fas fa-envelope"></i> founder@hormocare.ai</p>
+                            <p><i class="fas fa-phone"></i> +91-9876-543-210</p>
+                            <p><i class="fas fa-linkedin"></i> linkedin.com/company/hormocare-ai</p>
+                        </div>
+                        <div class="demo-access">
+                            <h4>Try the Demo</h4>
+                            <p>Scan QR code or visit: <strong>hormocare.ai/demo</strong></p>
+                            <div class="qr-placeholder">
+                                [QR Code Here]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            if (n > totalSlides) currentSlide = totalSlides;
+            if (n < 1) currentSlide = 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+            
+            document.getElementById('current-slide').textContent = currentSlide;
+            
+            // Update navigation buttons
+            document.getElementById('prev-btn').style.opacity = currentSlide === 1 ? '0.5' : '1';
+            document.getElementById('next-btn').style.opacity = currentSlide === totalSlides ? '0.5' : '1';
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        document.getElementById('total-slides').textContent = totalSlides;
+        showSlide(1);
+    </script>
+</body>
+</html>
