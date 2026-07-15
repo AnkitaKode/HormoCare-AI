@@ -142,21 +142,6 @@ class HormoCareAI {
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 - No additional software required
 
-### Installation
-```bash
-# Clone the repository
-git clone https://github.com/your-username/hormocare-ai.git
-
-# Navigate to project directory
-cd hormocare-ai
-
-# Open in browser
-open index.html
-
-# Or serve with a local server
-python -m http.server 8000
-# Visit http://localhost:8000
-```
 
 ### Project Structure
 ```
@@ -327,7 +312,7 @@ hormocare-ai/
 ## 🎯 Next Steps
 
 ### Development Roadmap
-- [ ] Mobile app development (React Native/Flutter)
+- [ ] Mobile app development
 - [ ] Backend API and user authentication
 - [ ] Payment gateway integration
 - [ ] Real-time doctor availability
@@ -344,9 +329,6 @@ hormocare-ai/
 - Corporate wellness programs
 - Government health initiatives
 
-## 📄 License
-
-This project is proprietary software. All rights reserved.
 
 ## 🙏 Acknowledgments
 
