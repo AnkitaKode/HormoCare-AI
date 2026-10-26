@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Local database & uploaded user medical reports
+data/uploads/*
+!data/uploads/.gitkeep
+
+# System & OS files
+.DS_Store
+Thumbs.db
+*.log

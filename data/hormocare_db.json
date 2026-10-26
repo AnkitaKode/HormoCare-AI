@@ -1,0 +1,1140 @@
+{
+  "appData": {
+    "profile": {
+      "name": "Ananya Sharma",
+      "age": 26,
+      "weight": 68,
+      "height": 162,
+      "familyHistory": "mother",
+      "exercise": "light",
+      "diet": "moderate"
+    },
+    "symptoms": [
+      {
+        "date": "2026-10-13",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 66.5,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1791893923465
+      },
+      {
+        "date": "2026-10-14",
+        "cycleLength": 41,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 66.62,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "severe",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1791980323465
+      },
+      {
+        "date": "2026-10-15",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 66.74,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1792066723465
+      },
+      {
+        "date": "2026-10-16",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 66.86,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1792153123465
+      },
+      {
+        "date": "2026-10-17",
+        "cycleLength": 41,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 66.98,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "severe",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1792239523465
+      },
+      {
+        "date": "2026-10-18",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 67.1,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1792325923465
+      },
+      {
+        "date": "2026-10-19",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 67.22,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "fair",
+        "notes": "Mild abdominal cramps, missed period continues.",
+        "timestamp": 1792412323465
+      },
+      {
+        "date": "2026-10-20",
+        "cycleLength": 41,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 67.34,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "severe",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1792498723465
+      },
+      {
+        "date": "2026-10-21",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": false,
+        "weight": 67.46,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1792585123465
+      },
+      {
+        "date": "2026-10-22",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": true,
+        "weight": 67.58,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1792671523465
+      },
+      {
+        "date": "2026-10-23",
+        "cycleLength": 41,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": true,
+        "weight": 67.7,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "severe",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1792757923465
+      },
+      {
+        "date": "2026-10-24",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": true,
+        "weight": 67.82,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "poor",
+        "notes": "",
+        "timestamp": 1792844323465
+      },
+      {
+        "date": "2026-10-25",
+        "cycleLength": 38,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": true,
+        "weight": 67.94,
+        "acne": 4,
+        "hairFall": "medium",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "moderate",
+        "sleepQuality": "fair",
+        "notes": "",
+        "timestamp": 1792930723465
+      },
+      {
+        "date": "2026-10-26",
+        "cycleLength": 41,
+        "lastPeriodDate": "2026-03-12",
+        "missedPeriod": true,
+        "weight": 68.06,
+        "acne": 3,
+        "hairFall": "high",
+        "hirsutism": "medium",
+        "acanthosisNigricans": "moderate",
+        "sugarCravings": "moderate",
+        "moodSwings": "severe",
+        "sleepQuality": "poor",
+        "notes": "Feeling fatigued today, noticeable skin breakouts.",
+        "timestamp": 1793017123465
+      }
+    ],
+    "dietEntries": [
+      {
+        "date": "2026-10-20",
+        "waterIntake": 6,
+        "totalCalories": 1840,
+        "totalProtein": 60,
+        "totalCarbs": 209,
+        "totalFats": 48,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792498723465
+      },
+      {
+        "date": "2026-10-21",
+        "waterIntake": 8,
+        "totalCalories": 1820,
+        "totalProtein": 59,
+        "totalCarbs": 210,
+        "totalFats": 50,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792585123465
+      },
+      {
+        "date": "2026-10-22",
+        "waterIntake": 7,
+        "totalCalories": 1800,
+        "totalProtein": 58,
+        "totalCarbs": 206,
+        "totalFats": 49,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792671523465
+      },
+      {
+        "date": "2026-10-23",
+        "waterIntake": 6,
+        "totalCalories": 1780,
+        "totalProtein": 61,
+        "totalCarbs": 207,
+        "totalFats": 48,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792757923465
+      },
+      {
+        "date": "2026-10-24",
+        "waterIntake": 8,
+        "totalCalories": 1760,
+        "totalProtein": 60,
+        "totalCarbs": 208,
+        "totalFats": 50,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792844323465
+      },
+      {
+        "date": "2026-10-25",
+        "waterIntake": 7,
+        "totalCalories": 1740,
+        "totalProtein": 59,
+        "totalCarbs": 209,
+        "totalFats": 49,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1792930723465
+      },
+      {
+        "date": "2026-10-26",
+        "waterIntake": 6,
+        "totalCalories": 1720,
+        "totalProtein": 58,
+        "totalCarbs": 210,
+        "totalFats": 48,
+        "meals": [
+          {
+            "type": "Breakfast",
+            "items": [
+              {
+                "name": "Oats porridge with almonds & berries",
+                "calories": 320,
+                "protein": 9,
+                "carbs": 45,
+                "fats": 8
+              },
+              {
+                "name": "Spearmint Tea",
+                "calories": 2,
+                "protein": 0,
+                "carbs": 0,
+                "fats": 0
+              }
+            ]
+          },
+          {
+            "type": "Lunch",
+            "items": [
+              {
+                "name": "Brown rice (1 cup)",
+                "calories": 216,
+                "protein": 5,
+                "carbs": 45,
+                "fats": 1.8
+              },
+              {
+                "name": "Dal (Toor/Moong, 1 cup)",
+                "calories": 198,
+                "protein": 14,
+                "carbs": 34,
+                "fats": 1
+              },
+              {
+                "name": "Mixed vegetable sabzi (1 cup)",
+                "calories": 120,
+                "protein": 4,
+                "carbs": 16,
+                "fats": 5
+              }
+            ]
+          },
+          {
+            "type": "Snacks",
+            "items": [
+              {
+                "name": "Makhana / Fox nuts (1 cup)",
+                "calories": 105,
+                "protein": 4,
+                "carbs": 18,
+                "fats": 1
+              },
+              {
+                "name": "Walnuts (5 halves)",
+                "calories": 65,
+                "protein": 1.5,
+                "carbs": 1.4,
+                "fats": 6.5
+              }
+            ]
+          },
+          {
+            "type": "Dinner",
+            "items": [
+              {
+                "name": "Roti / Chapati (2 pieces)",
+                "calories": 240,
+                "protein": 7,
+                "carbs": 40,
+                "fats": 7
+              },
+              {
+                "name": "Paneer (100g)",
+                "calories": 265,
+                "protein": 18,
+                "carbs": 1.2,
+                "fats": 21
+              },
+              {
+                "name": "Palak / Spinach sabzi (1 cup)",
+                "calories": 90,
+                "protein": 5,
+                "carbs": 8,
+                "fats": 5
+              }
+            ]
+          }
+        ],
+        "timestamp": 1793017123465
+      }
+    ],
+    "riskAssessment": {
+      "score": 65,
+      "level": {
+        "level": "moderate",
+        "cssClass": "moderate-risk",
+        "label": "Moderate Risk",
+        "color": "#F39C12"
+      },
+      "factors": [
+        {
+          "type": "high",
+          "icon": "fas fa-exclamation-triangle",
+          "text": "Irregular cycles (>35 days)",
+          "impact": "Major PCOS indicator"
+        },
+        {
+          "type": "high",
+          "icon": "fas fa-times-circle",
+          "text": "Frequent missed periods",
+          "impact": "Oligomenorrhea - key PCOS symptom"
+        },
+        {
+          "type": "medium",
+          "icon": "fas fa-weight",
+          "text": "Overweight (BMI 25.9)",
+          "impact": "Increased PCOS risk"
+        },
+        {
+          "type": "high",
+          "icon": "fas fa-user-injured",
+          "text": "Moderate-severe persistent acne",
+          "impact": "Indicates high androgen levels"
+        },
+        {
+          "type": "high",
+          "icon": "fas fa-user-alt",
+          "text": "Excessive hair fall/thinning",
+          "impact": "Androgenic alopecia - PCOS sign"
+        },
+        {
+          "type": "medium",
+          "icon": "fas fa-venus",
+          "text": "Increased body hair growth",
+          "impact": "Possible PCOS symptom"
+        },
+        {
+          "type": "medium",
+          "icon": "fas fa-dna",
+          "text": "Strong family history of PCOS",
+          "impact": "Genetic predisposition (35-40% heritability)"
+        }
+      ],
+      "recommendations": {
+        "immediate": [
+          {
+            "priority": "high",
+            "icon": "fas fa-user-md",
+            "text": "Consult gynecologist within 2-4 weeks",
+            "detail": "Moderate risk warrants professional evaluation. Discuss your symptoms and family history."
+          },
+          {
+            "priority": "high",
+            "icon": "fas fa-vial",
+            "text": "Get blood tests: hormone panel + fasting insulin",
+            "detail": "Fasting glucose, insulin, lipid profile, LH/FSH ratio."
+          }
+        ],
+        "diet": [
+          {
+            "text": "Follow low glycemic index (GI) diet",
+            "detail": "Choose whole grains over refined carbs. Brown rice, oats, quinoa."
+          },
+          {
+            "text": "Increase fiber intake to 25-30g daily",
+            "detail": "Vegetables, fruits, legumes, whole grains."
+          },
+          {
+            "text": "Reduce refined sugars and processed foods",
+            "detail": "Avoid sugary drinks and packaged snacks."
+          },
+          {
+            "text": "Include anti-inflammatory foods",
+            "detail": "Turmeric, berries, leafy greens, walnuts."
+          }
+        ],
+        "exercise": [
+          {
+            "text": "Moderate cardio: 150 minutes/week",
+            "detail": "Brisk walking, cycling, swimming 30 mins 5 days/week."
+          },
+          {
+            "text": "Strength training: 2-3 times/week",
+            "detail": "Bodyweight squats, pushups, resistance bands."
+          },
+          {
+            "text": "Yoga for stress relief: 2-3 times/week",
+            "detail": "Surya Namaskar and deep breathing."
+          }
+        ],
+        "supplements": [
+          {
+            "name": "Myo-inositol",
+            "dosage": "2-4g daily",
+            "benefit": "Improves insulin sensitivity and ovulation",
+            "note": "proven for PCOS"
+          },
+          {
+            "name": "Vitamin D3",
+            "dosage": "2000 IU daily",
+            "benefit": "Supports hormonal balance and mood",
+            "note": "Essential for endocrine function"
+          },
+          {
+            "name": "Spearmint Tea",
+            "dosage": "2 cups daily",
+            "benefit": "Naturally reduces free testosterone",
+            "note": "Helps with acne & hirsutism"
+          }
+        ],
+        "monitoring": [
+          "Track menstrual cycles daily",
+          "Monitor weight weekly (same morning conditions)",
+          "Log mood and energy levels",
+          "Track sleep quality and duration",
+          "Photo-document skin and hair changes monthly"
+        ]
+      }
+    },
+    "lastUpdated": 1793017123465
+  },
+  "checklist": {
+    "2026-10-26": {
+      "0": true,
+      "1": true,
+      "2": false,
+      "3": true
+    }
+  },
+  "bookings": [
+    {
+      "id": "BK-MVP83MVD",
+      "doctor": "Dr. Priya Sharma",
+      "type": "video",
+      "date": "2026-10-29",
+      "time": "04:00 PM",
+      "concerns": "Irregular cycles for 6 months, persistent acne and hair thinning. Want a comprehensive hormone evaluation.",
+      "status": "Confirmed",
+      "reports": [],
+      "bookingDate": "2026-10-26T12:18:43.465Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD-848399",
+      "items": [
+        {
+          "id": 1,
+          "name": "Myo-Inositol Powder",
+          "price": 899,
+          "qty": 1,
+          "icon": "🌸"
+        },
+        {
+          "id": 4,
+          "name": "Spearmint Tea (Organic)",
+          "price": 349,
+          "qty": 1,
+          "icon": "🍵"
+        }
+      ],
+      "subtotal": 1248,
+      "delivery": 0,
+      "total": 1248,
+      "status": "Preparing for Dispatch",
+      "customer": {
+        "name": "Ananya Sharma",
+        "phone": "+91 98765 43210",
+        "address": "Flat 402, Green Meadows, Bengaluru, Karnataka - 560034",
+        "paymentMethod": "UPI"
+      },
+      "date": "2026-10-25T12:18:43.465Z"
+    }
+  ],
+  "reports": [],
+  "reviews": [],
+  "stats": {
+    "totalUsers": 12498,
+    "dailyActiveUsers": 345,
+    "totalSessions": 14,
+    "firstVisit": "2026-10-13",
+    "lastVisit": "2026-10-26"
+  },
+  "lastUpdated": 1793017123465
+}

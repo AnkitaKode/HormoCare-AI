@@ -1,4 +1,4 @@
-# HormoCare AI - Complete Feature List
+# HormoCare - Complete Feature List
 
 ## 🎉 All Features Implemented (March 2026)
 

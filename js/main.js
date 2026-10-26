@@ -75,23 +75,34 @@ function renderProfileSetup() {
     const p = hormoCareApp.getProfile();
     return `
         <div class="demo-form">
-            <h3><i class="fas fa-user-circle"></i> Create Your Health Profile</h3>
-            <p class="form-subtitle">This information helps us personalize your PCOS risk assessment.</p>
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+                <div>
+                    <h3 style="margin-bottom:0.2rem;"><i class="fas fa-user-circle"></i> Create Your Health Profile</h3>
+                    <p class="form-subtitle" style="margin-bottom:0;">This information helps us personalize your PCOS risk assessment.</p>
+                </div>
+                <button type="button" class="btn btn-secondary btn-small" id="loadDemoBtn" style="font-size:0.8rem; padding:0.4rem 0.8rem;">
+                    <i class="fas fa-magic"></i> Load Sample Data
+                </button>
+            </div>
             <form class="profile-form" id="profileForm">
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label><i class="fas fa-user"></i> Full Name (Optional)</label>
+                    <input type="text" id="prof-name" placeholder="e.g. Ananya Sharma" value="${p.name || ''}">
+                </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label><i class="fas fa-birthday-cake"></i> Age</label>
-                        <input type="number" id="prof-age" placeholder="e.g. 25" min="12" max="60" value="${p.age || ''}">
+                        <label><i class="fas fa-birthday-cake"></i> Age *</label>
+                        <input type="number" id="prof-age" placeholder="e.g. 25" min="12" max="60" value="${p.age || ''}" required>
                     </div>
                     <div class="form-group">
-                        <label><i class="fas fa-weight"></i> Weight (kg)</label>
-                        <input type="number" id="prof-weight" placeholder="e.g. 60" min="30" max="200" step="0.1" value="${p.weight || ''}">
+                        <label><i class="fas fa-weight"></i> Weight (kg) *</label>
+                        <input type="number" id="prof-weight" placeholder="e.g. 60" min="30" max="200" step="0.1" value="${p.weight || ''}" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label><i class="fas fa-ruler-vertical"></i> Height (cm)</label>
-                        <input type="number" id="prof-height" placeholder="e.g. 165" min="100" max="220" value="${p.height || ''}">
+                        <label><i class="fas fa-ruler-vertical"></i> Height (cm) *</label>
+                        <input type="number" id="prof-height" placeholder="e.g. 165" min="100" max="220" value="${p.height || ''}" required>
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-dna"></i> Family History of PCOS</label>
@@ -139,6 +150,15 @@ function renderProfileSetup() {
 }
 
 function attachProfileHandlers() {
+    document.getElementById('loadDemoBtn')?.addEventListener('click', async function () {
+        if (window.HormoCareStorage) {
+            await window.HormoCareStorage.loadSampleData();
+            hormoCareApp.loadData();
+            showFormMessage('profile-msg', 'Sample PCOS data loaded! Moving to AI Analysis...', 'success');
+            setTimeout(() => setActiveStep(3), 800);
+        }
+    });
+
     const form = document.getElementById('profileForm');
     if (!form) return;
     form.addEventListener('submit', function (e) {
@@ -153,6 +173,7 @@ function attachProfileHandlers() {
         }
 
         hormoCareApp.saveProfile({
+            name: document.getElementById('prof-name')?.value || '',
             age: parseInt(age),
             weight: parseFloat(weight),
             height: parseInt(height),
@@ -208,26 +229,43 @@ function renderSymptomTracking() {
                     ${renderWeightTrend(history)}
                 </div>
                 <div class="tracking-card">
-                    <div class="card-header"><i class="fas fa-user-injured"></i><h4>Acne Severity</h4></div>
+                    <div class="card-header"><i class="fas fa-user-injured"></i><h4>Hormonal Jawline Acne</h4></div>
                     <div class="severity-scale-input" id="acneScale">
                         ${[1, 2, 3, 4, 5].map(n => `<button class="scale-btn ${(entry.acne || 0) === n ? 'active' : ''}" data-val="${n}">${n}</button>`).join('')}
                     </div>
-                    <div class="scale-labels"><span>None</span><span>Mild</span><span>Moderate</span><span>Severe</span><span>Very Severe</span></div>
+                    <div class="scale-labels"><span>None</span><span>Mild</span><span>Moderate</span><span>Severe</span><span>Cystic</span></div>
+                    <span class="symptom-hint">Deep, painful flares clustering along the chin and jawline.</span>
                 </div>
                 <div class="tracking-card">
-                    <div class="card-header"><i class="fas fa-user-alt"></i><h4>Hair Fall</h4></div>
+                    <div class="card-header"><i class="fas fa-user-alt"></i><h4>Crown Scalp Hair Thinning</h4></div>
                     <div class="option-group" id="hairFallGroup">
                         ${['low', 'medium', 'high'].map(v => `<button class="option-btn ${entry.hairFall === v ? 'active' : ''}" data-val="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`).join('')}
                     </div>
+                    <span class="symptom-hint">Widening center part or diffuse crown thinning (androgenic alopecia).</span>
                 </div>
                 <div class="tracking-card">
-                    <div class="card-header"><i class="fas fa-venus"></i><h4>Excess Body Hair</h4></div>
+                    <div class="card-header"><i class="fas fa-venus"></i><h4>Excess Body Hair (Hirsutism)</h4></div>
                     <div class="option-group" id="hirsutismGroup">
                         ${['low', 'medium', 'high'].map(v => `<button class="option-btn ${entry.hirsutism === v ? 'active' : ''}" data-val="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`).join('')}
                     </div>
+                    <span class="symptom-hint">Coarse, dark terminal hair on chin, upper lip, chest, or abdomen.</span>
                 </div>
                 <div class="tracking-card">
-                    <div class="card-header"><i class="fas fa-brain"></i><h4>Mood</h4></div>
+                    <div class="card-header"><i class="fas fa-fingerprint"></i><h4>Acanthosis Nigricans</h4></div>
+                    <div class="option-group" id="acanthosisGroup">
+                        ${['none', 'mild', 'moderate', 'severe'].map(v => `<button class="option-btn ${(entry.acanthosisNigricans || 'none') === v ? 'active' : ''}" data-val="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`).join('')}
+                    </div>
+                    <span class="symptom-hint">Dark velvety skin patches behind the neck or underarms (insulin marker).</span>
+                </div>
+                <div class="tracking-card">
+                    <div class="card-header"><i class="fas fa-cookie-bite"></i><h4>Sugar Cravings & Crashes</h4></div>
+                    <div class="option-group" id="cravingsGroup">
+                        ${['none', 'mild', 'moderate', 'severe'].map(v => `<button class="option-btn ${(entry.sugarCravings || 'none') === v ? 'active' : ''}" data-val="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`).join('')}
+                    </div>
+                    <span class="symptom-hint">Intense sugar/carb cravings or post-meal sluggishness and brain fog.</span>
+                </div>
+                <div class="tracking-card">
+                    <div class="card-header"><i class="fas fa-brain"></i><h4>Mood & Anxiety</h4></div>
                     <div class="option-group" id="moodGroup">
                         ${['none', 'mild', 'moderate', 'severe'].map(v => `<button class="option-btn ${entry.moodSwings === v ? 'active' : ''}" data-val="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</button>`).join('')}
                     </div>
@@ -239,8 +277,8 @@ function renderSymptomTracking() {
                     </div>
                 </div>
                 <div class="tracking-card full-width">
-                    <div class="card-header"><i class="fas fa-sticky-note"></i><h4>Notes</h4></div>
-                    <textarea id="track-notes" placeholder="Any additional notes about how you're feeling today..." rows="3">${entry.notes || ''}</textarea>
+                    <div class="card-header"><i class="fas fa-sticky-note"></i><h4>Clinical Notes</h4></div>
+                    <textarea id="track-notes" placeholder="Any additional notes about symptoms, medications, or how you're feeling today..." rows="3">${entry.notes || ''}</textarea>
                 </div>
             </div>
             <div id="tracking-msg" class="form-message"></div>
@@ -320,7 +358,7 @@ function attachTrackingHandlers() {
     });
 
     // Option group buttons
-    ['hairFallGroup', 'hirsutismGroup', 'moodGroup', 'sleepGroup'].forEach(gid => {
+    ['hairFallGroup', 'hirsutismGroup', 'acanthosisGroup', 'cravingsGroup', 'moodGroup', 'sleepGroup'].forEach(gid => {
         document.querySelectorAll(`#${gid} .option-btn`).forEach(btn => {
             btn.addEventListener('click', function () {
                 document.querySelectorAll(`#${gid} .option-btn`).forEach(b => b.classList.remove('active'));
@@ -368,6 +406,8 @@ function loadTrackingForDate(dateStr) {
     };
     setGroup('hairFallGroup', entry.hairFall || '');
     setGroup('hirsutismGroup', entry.hirsutism || '');
+    setGroup('acanthosisGroup', entry.acanthosisNigricans || 'none');
+    setGroup('cravingsGroup', entry.sugarCravings || 'none');
     setGroup('moodGroup', entry.moodSwings || '');
     setGroup('sleepGroup', entry.sleepQuality || '');
 }
@@ -386,6 +426,8 @@ function saveTracking() {
         acne: acneBtn ? parseInt(acneBtn.dataset.val) : 0,
         hairFall: getActive('hairFallGroup'),
         hirsutism: getActive('hirsutismGroup'),
+        acanthosisNigricans: getActive('acanthosisGroup') || 'none',
+        sugarCravings: getActive('cravingsGroup') || 'none',
         moodSwings: getActive('moodGroup'),
         sleepQuality: getActive('sleepGroup'),
         notes: document.getElementById('track-notes')?.value || ''
@@ -414,11 +456,105 @@ function renderAnalysis() {
         `;
     }
 
-    const { score, level, factors, recommendations } = risk;
+    const { score, level, factors, recommendations, rotterdam, phenotype, pillars } = risk;
+
+    const rotterdamHtml = rotterdam ? `
+        <div class="rotterdam-result-box">
+            <div class="rotterdam-result-header">
+                <h4><i class="fas fa-microscope" style="color:var(--pcos-teal)"></i> Rotterdam Consensus Alignment</h4>
+                <span class="rotterdam-count-pill ${rotterdam.criteriaCount >= 2 ? 'count-positive' : rotterdam.criteriaCount === 1 ? 'count-borderline' : 'count-negative'}">
+                    ${rotterdam.criteriaCount} of 3 Criteria Detected (${rotterdam.criteriaCount >= 2 ? 'Meets PCOS Criteria' : rotterdam.criteriaCount === 1 ? 'Borderline Marker' : 'Within Normal Range'})
+                </span>
+            </div>
+            <div class="rotterdam-pillars-list">
+                <div class="rotterdam-pillar-row ${rotterdam.od.positive ? 'met' : 'not-met'}">
+                    <i class="fas fa-${rotterdam.od.positive ? 'exclamation-circle' : 'check-circle'} rotterdam-pillar-icon"></i>
+                    <div class="rotterdam-pillar-info">
+                        <strong>${rotterdam.od.name}</strong>
+                        <span>${rotterdam.od.detail}</span>
+                    </div>
+                </div>
+                <div class="rotterdam-pillar-row ${rotterdam.ha.positive ? 'met' : 'not-met'}">
+                    <i class="fas fa-${rotterdam.ha.positive ? 'exclamation-circle' : 'check-circle'} rotterdam-pillar-icon"></i>
+                    <div class="rotterdam-pillar-info">
+                        <strong>${rotterdam.ha.name}</strong>
+                        <span>${rotterdam.ha.detail}</span>
+                    </div>
+                </div>
+                <div class="rotterdam-pillar-row ${rotterdam.pcom.positive ? 'met' : 'not-met'}">
+                    <i class="fas fa-${rotterdam.pcom.positive ? 'exclamation-circle' : 'check-circle'} rotterdam-pillar-icon"></i>
+                    <div class="rotterdam-pillar-info">
+                        <strong>${rotterdam.pcom.name}</strong>
+                        <span>${rotterdam.pcom.detail}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    const phenotypeHtml = (phenotype && phenotype.code !== 'N') ? `
+        <div class="phenotype-result-card">
+            <div class="phenotype-header">
+                <span class="phenotype-code-badge">PHENOTYPE ${phenotype.code}</span>
+                <h4>${phenotype.name}</h4>
+            </div>
+            <p class="pheno-desc">${phenotype.desc}</p>
+            <div class="pheno-action-box">
+                <strong>Clinical Management Focus:</strong> ${phenotype.clinicalFocus}
+            </div>
+        </div>
+    ` : '';
+
+    const pillarsHtml = pillars ? `
+        <div class="pillar-breakdown-section">
+            <h4><i class="fas fa-sliders-h" style="color:var(--pcos-teal)"></i> 4-Pillar Endocrine Breakdown</h4>
+            <div class="pillar-gauges-grid">
+                <div class="pillar-gauge-card">
+                    <div class="pillar-gauge-title">
+                        <span><i class="fas fa-calendar-alt" style="color:var(--pcos-teal); margin-right:4px;"></i> Cycle & Ovulation</span>
+                        <span>${pillars.cycle}%</span>
+                    </div>
+                    <div class="pillar-gauge-bar">
+                        <div class="pillar-gauge-fill" style="width:${pillars.cycle}%; background:var(--pcos-teal);"></div>
+                    </div>
+                </div>
+                <div class="pillar-gauge-card">
+                    <div class="pillar-gauge-title">
+                        <span><i class="fas fa-venus" style="color:var(--pcos-coral); margin-right:4px;"></i> Androgen Signs</span>
+                        <span>${pillars.androgens}%</span>
+                    </div>
+                    <div class="pillar-gauge-bar">
+                        <div class="pillar-gauge-fill" style="width:${pillars.androgens}%; background:var(--pcos-coral);"></div>
+                    </div>
+                </div>
+                <div class="pillar-gauge-card">
+                    <div class="pillar-gauge-title">
+                        <span><i class="fas fa-fire-alt" style="color:var(--pcos-rose); margin-right:4px;"></i> Insulin / Metabolic</span>
+                        <span>${pillars.metabolic}%</span>
+                    </div>
+                    <div class="pillar-gauge-bar">
+                        <div class="pillar-gauge-fill" style="width:${pillars.metabolic}%; background:var(--pcos-rose);"></div>
+                    </div>
+                </div>
+                <div class="pillar-gauge-card">
+                    <div class="pillar-gauge-title">
+                        <span><i class="fas fa-heartbeat" style="color:var(--pcos-lavender); margin-right:4px;"></i> Lifestyle & Stress</span>
+                        <span>${pillars.lifestyle}%</span>
+                    </div>
+                    <div class="pillar-gauge-bar">
+                        <div class="pillar-gauge-fill" style="width:${pillars.lifestyle}%; background:var(--pcos-lavender);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    ` : '';
 
     return `
         <div class="demo-analysis">
-            <h3><i class="fas fa-brain"></i> AI Risk Assessment</h3>
+            <div class="pcos-ribbon-badge" style="margin-bottom:1rem;">
+                <i class="fas fa-ribbon"></i> Endocrine Risk Report
+            </div>
+            <h3><i class="fas fa-brain"></i> AI PCOS Risk Assessment</h3>
             <div class="risk-dashboard">
                 <div class="risk-score-main">
                     <div class="risk-circle-large ${level.cssClass}">
@@ -430,9 +566,13 @@ function renderAnalysis() {
                     <p class="risk-description">${getRiskDescription(score)}</p>
                 </div>
 
+                ${rotterdamHtml}
+                ${phenotypeHtml}
+                ${pillarsHtml}
+
                 ${factors.length > 0 ? `
                 <div class="risk-factors">
-                    <h4>Key Risk Factors</h4>
+                    <h4>Key Clinical Risk Factors</h4>
                     ${factors.map(f => `
                         <div class="factor-item ${f.type}">
                             <i class="${f.icon}"></i>
@@ -446,7 +586,7 @@ function renderAnalysis() {
                 ` : ''}
 
                 <div class="ai-insights">
-                    <h4><i class="fas fa-robot"></i> AI Insights</h4>
+                    <h4><i class="fas fa-robot"></i> Clinical AI Insights</h4>
                     <p>${generateInsightText(score, factors)}</p>
                 </div>
             </div>
@@ -984,7 +1124,8 @@ function startAssessment() {
 }
 
 function learnMore() {
-    document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+    const el = document.getElementById('rotterdam') || document.getElementById('about');
+    el?.scrollIntoView({ behavior: 'smooth' });
 }
 
 // Navbar scroll effect

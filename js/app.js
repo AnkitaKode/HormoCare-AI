@@ -47,12 +47,14 @@ class HormoCareAI {
 
     _getStats() {
         try {
+            if (typeof localStorage === 'undefined') return {};
             return JSON.parse(localStorage.getItem('hormocare_stats') || '{}');
         } catch { return {}; }
     }
 
     _saveStats(stats) {
         try {
+            if (typeof localStorage === 'undefined') return;
             localStorage.setItem('hormocare_stats', JSON.stringify(stats));
         } catch (e) {
             console.error('Error saving stats:', e);
@@ -214,9 +216,12 @@ class HormoCareAI {
             acne: Number(latest.acne) || 0,
             hairFall: latest.hairFall || 'low',
             hirsutism: latest.hirsutism || 'low',
+            acanthosisNigricans: latest.acanthosisNigricans || 'none',
+            sugarCravings: latest.sugarCravings || 'none',
             moodSwings: latest.moodSwings || 'none',
             sleepQuality: latest.sleepQuality || 'good',
             familyHistory: profile.familyHistory || 'no',
+            pcosDiagnosed: profile.pcosDiagnosed || 'unknown',
             age: Number(profile.age) || 25,
             exercise: profile.exercise || 'moderate',
             diet: profile.diet || 'moderate'
@@ -231,7 +236,7 @@ class HormoCareAI {
         riskScore += cycleRisk.score * 0.4;
         if (cycleRisk.factors.length > 0) riskFactors.push(...cycleRisk.factors);
 
-        const weightRisk = this._analyzeWeight(symptoms.weight, symptoms.height, symptoms.weightHistory);
+        const weightRisk = this._analyzeWeight(symptoms.weight, symptoms.height, symptoms.weightHistory, symptoms);
         riskScore += weightRisk.score * 0.2;
         if (weightRisk.factors.length > 0) riskFactors.push(...weightRisk.factors);
 
@@ -244,12 +249,109 @@ class HormoCareAI {
         if (lifestyleRisk.factors.length > 0) riskFactors.push(...lifestyleRisk.factors);
 
         const finalScore = Math.min(100, Math.max(0, Math.round(riskScore)));
+        const rotterdam = this._evaluateRotterdamCriteria(cycleRisk, hormonalRisk, weightRisk, symptoms);
+        const phenotype = this._evaluatePCOSPhenotype(rotterdam);
 
         return {
             score: finalScore,
             level: this._getRiskLevel(finalScore),
+            rotterdam,
+            phenotype,
+            pillars: {
+                cycle: Math.min(100, Math.round(cycleRisk.score)),
+                androgens: Math.min(100, Math.round(hormonalRisk.score)),
+                metabolic: Math.min(100, Math.round(weightRisk.score)),
+                lifestyle: Math.min(100, Math.round(lifestyleRisk.score))
+            },
             factors: riskFactors,
-            recommendations: this._generateRecommendations(finalScore, riskFactors)
+            recommendations: this._generateRecommendations(finalScore, riskFactors, rotterdam)
+        };
+    }
+
+    _evaluateRotterdamCriteria(cycleRisk, hormonalRisk, weightRisk, symptoms) {
+        const odPositive = !!(symptoms.cycle && (symptoms.cycle.averageLength > 35 || symptoms.cycle.averageLength < 21 || symptoms.cycle.irregularity === 'high' || symptoms.cycle.irregularity === 'moderate' || symptoms.cycle.missedPeriods >= 1));
+        const haPositive = (symptoms.acne >= 3 || symptoms.hairFall === 'high' || symptoms.hairFall === 'medium' || symptoms.hirsutism === 'high' || symptoms.hirsutism === 'medium');
+        const bmi = symptoms.weight && symptoms.height ? symptoms.weight / ((symptoms.height / 100) ** 2) : 22;
+        const pcomPositive = (bmi >= 25 || (symptoms.weightHistory && symptoms.weightHistory.recentGain > 4) || symptoms.acanthosisNigricans === 'moderate' || symptoms.acanthosisNigricans === 'severe' || symptoms.sugarCravings === 'moderate' || symptoms.sugarCravings === 'severe');
+
+        let criteriaCount = 0;
+        if (odPositive) criteriaCount++;
+        if (haPositive) criteriaCount++;
+        if (pcomPositive) criteriaCount++;
+
+        return {
+            criteriaCount,
+            od: { name: 'Pillar 1: Ovulatory Dysfunction', positive: odPositive, detail: odPositive ? 'Irregular cycle (>35d) or missed periods detected' : 'Cycle lengths within normal 21-35 day window' },
+            ha: { name: 'Pillar 2: Hyperandrogenic Signs', positive: haPositive, detail: haPositive ? 'Elevated androgen signs (jawline acne, crown thinning, hirsutism)' : 'No significant clinical androgen excess' },
+            pcom: { name: 'Pillar 3: Metabolic & Insulin Markers', positive: pcomPositive, detail: pcomPositive ? 'Insulin resistance biomarkers (BMI/cravings/acanthosis)' : 'Metabolic indicators within standard limits' },
+            diagnosisProbable: criteriaCount >= 2
+        };
+    }
+
+    _evaluatePCOSPhenotype(rotterdam) {
+        const { od, ha, pcom } = rotterdam;
+        if (od.positive && ha.positive && pcom.positive) {
+            return {
+                code: 'A',
+                name: 'Phenotype A (Classic / Full PCOS)',
+                type: 'Phenotype A (Classic PCOS)',
+                badge: 'Classic / Severe',
+                badgeColor: '#E11D48',
+                subtitle: 'Full Spectrum: Ovulatory Dysfunction + Hyperandrogenism + Metabolic Insulin Resistance',
+                desc: 'The most comprehensive clinical presentation. Characterized by delayed or missed ovulation, elevated free androgens, and marked insulin resistance requiring dual endocrine and nutritional management.',
+                description: 'The most comprehensive clinical presentation. Characterized by delayed or missed ovulation, elevated free androgens, and marked insulin resistance requiring dual endocrine and nutritional management.',
+                clinicalFocus: 'Inositol 40:1 ratio, low glycemic load Indian diet, insulin sensitization, and ultrasound pelvic tracking.'
+            };
+        }
+        if (od.positive && ha.positive && !pcom.positive) {
+            return {
+                code: 'B',
+                name: 'Phenotype B (Hyperandrogenic Anovulatory)',
+                type: 'Phenotype B (Hyperandrogenic Anovulatory)',
+                badge: 'Non-PCO Morphology',
+                badgeColor: '#0D9488',
+                subtitle: 'Cycle Irregularity + Androgen Elevation (Lean/Normal Weight)',
+                desc: 'Prominent menstrual disruptions and high androgens (cystic acne, hirsutism), often presenting in lean individuals where adrenal stress or LH/FSH ratio is the primary driver.',
+                description: 'Prominent menstrual disruptions and high androgens (cystic acne, hirsutism), often presenting in lean individuals where adrenal stress or LH/FSH ratio is the primary driver.',
+                clinicalFocus: 'Spearmint anti-androgenic tea, hormonal balancing, stress/adrenal cortisol regulation, and zinc supplementation.'
+            };
+        }
+        if (!od.positive && ha.positive && pcom.positive) {
+            return {
+                code: 'C',
+                name: 'Phenotype C (Ovulatory PCOS)',
+                type: 'Phenotype C (Ovulatory PCOS)',
+                badge: 'Ovulatory PCOS',
+                badgeColor: '#F59E0B',
+                subtitle: 'Regular Cycles + Hyperandrogenism + Metabolic Markers',
+                desc: 'Menstrual cycles may appear regular, but androgen excess (jawline acne, hirsutism) and metabolic insulin markers are actively present.',
+                description: 'Menstrual cycles may appear regular, but androgen excess (jawline acne, hirsutism) and metabolic insulin markers are actively present.',
+                clinicalFocus: 'Skin barrier anti-inflammatory care, topical/oral androgen suppression, Omega-3 fatty acids, and low-carb meal pacing.'
+            };
+        }
+        if (od.positive && !ha.positive && pcom.positive) {
+            return {
+                code: 'D',
+                name: 'Phenotype D (Normoandrogenic / Metabolic)',
+                type: 'Phenotype D (Non-Hyperandrogenic / Metabolic)',
+                badge: 'Normoandrogenic',
+                badgeColor: '#8B5CF6',
+                subtitle: 'Ovulatory Dysfunction + Metabolic Imbalance without High Androgens',
+                desc: 'Cycles are disrupted and insulin resistance is present, but skin and hair follicles remain largely unaffected by excess androgens.',
+                description: 'Cycles are disrupted and insulin resistance is present, but skin and hair follicles remain largely unaffected by excess androgens.',
+                clinicalFocus: 'Cycle rhythm restoration, gentle exercise, complex carbohydrate structuring, and magnesium glycinate.'
+            };
+        }
+        return {
+            code: 'N',
+            name: 'Low Phenotypic Evidence',
+            type: 'Low Phenotypic Evidence',
+            badge: 'Sub-Threshold',
+            badgeColor: '#10B981',
+            subtitle: 'Sub-threshold clinical indicators',
+            desc: 'Your logged symptoms do not currently meet the 2-of-3 Rotterdam criteria required for clinical PCOS confirmation.',
+            description: 'Your logged symptoms do not currently meet the 2-of-3 Rotterdam criteria required for clinical PCOS confirmation.',
+            clinicalFocus: 'Routine cycle tracking and balanced whole-food nutrition.'
         };
     }
 
@@ -259,85 +361,101 @@ class HormoCareAI {
 
         if (cycleData.averageLength > 35) {
             score += 40;
-            factors.push({ type: 'high', icon: 'fas fa-exclamation-triangle', text: 'Irregular cycles (>35 days)', impact: 'Major PCOS indicator' });
+            factors.push({ type: 'high', icon: 'fas fa-exclamation-triangle', text: 'Delayed Cycle (>35 days)', impact: 'Oligomenorrhea - Pillar 1 Rotterdam PCOS indicator' });
         } else if (cycleData.averageLength < 21) {
             score += 25;
-            factors.push({ type: 'medium', icon: 'fas fa-exclamation-circle', text: 'Short cycles (<21 days)', impact: 'Possible hormonal imbalance' });
+            factors.push({ type: 'medium', icon: 'fas fa-exclamation-circle', text: 'Shortened cycle (<21 days)', impact: 'Possible luteal phase defect / anovulatory bleeding' });
         }
 
         if (cycleData.irregularity === 'high') {
             score += 30;
-            factors.push({ type: 'high', icon: 'fas fa-calendar-times', text: 'Highly irregular periods', impact: 'Strong PCOS indicator' });
+            factors.push({ type: 'high', icon: 'fas fa-calendar-times', text: 'Severe cycle length variance', impact: 'Strong sign of anovulatory follicular arrest' });
         } else if (cycleData.irregularity === 'moderate') {
             score += 20;
-            factors.push({ type: 'medium', icon: 'fas fa-calendar-minus', text: 'Moderately irregular periods', impact: 'Possible PCOS sign' });
+            factors.push({ type: 'medium', icon: 'fas fa-calendar-minus', text: 'Moderate cycle irregularity', impact: 'Hormonal fluctuation between cycles' });
         }
 
-        if (cycleData.missedPeriods > 2) {
+        if (cycleData.missedPeriods > 1) {
             score += 35;
-            factors.push({ type: 'high', icon: 'fas fa-times-circle', text: 'Frequent missed periods', impact: 'Oligomenorrhea - key PCOS symptom' });
+            factors.push({ type: 'high', icon: 'fas fa-times-circle', text: 'Recurrent missed periods', impact: 'Amenorrhea / chronic anovulation' });
         }
 
         return { score, factors };
     }
 
-    _analyzeWeight(currentWeight, height, weightHistory) {
+    _analyzeWeight(currentWeight, height, weightHistory, symptoms = {}) {
         let score = 0, factors = [];
         if (!currentWeight || !height) return { score: 0, factors: [] };
 
         const bmi = currentWeight / ((height / 100) ** 2);
 
         if (bmi > 30) {
-            score += 25;
-            factors.push({ type: 'high', icon: 'fas fa-weight', text: `Obesity (BMI ${bmi.toFixed(1)})`, impact: 'Strong correlation with PCOS' });
+            score += 30;
+            factors.push({ type: 'high', icon: 'fas fa-weight', text: `Obesity BMI (${bmi.toFixed(1)})`, impact: 'Major exacerbator of hyperinsulinemia & free testosterone' });
         } else if (bmi > 25) {
-            score += 15;
-            factors.push({ type: 'medium', icon: 'fas fa-weight', text: `Overweight (BMI ${bmi.toFixed(1)})`, impact: 'Increased PCOS risk' });
-        }
-
-        if (weightHistory && weightHistory.recentGain > 5) {
             score += 20;
-            factors.push({ type: 'medium', icon: 'fas fa-arrow-up', text: 'Rapid weight gain (>5kg recently)', impact: 'Possible insulin resistance' });
+            factors.push({ type: 'medium', icon: 'fas fa-weight', text: `Overweight BMI (${bmi.toFixed(1)})`, impact: 'Increased risk of anovulatory cycles in South Asian women' });
+        } else if (bmi < 19) {
+            score += 10;
+            factors.push({ type: 'low', icon: 'fas fa-female', text: `Lean BMI (${bmi.toFixed(1)})`, impact: 'Lean PCOS phenotype - often adrenal/stress driven' });
         }
 
-        return { score, factors };
+        if (weightHistory && weightHistory.recentGain > 4) {
+            score += 20;
+            factors.push({ type: 'medium', icon: 'fas fa-arrow-up', text: 'Rapid visceral weight gain (>4kg)', impact: 'Classic sign of impaired peripheral glucose disposal' });
+        }
+
+        if (symptoms.acanthosisNigricans === 'moderate' || symptoms.acanthosisNigricans === 'severe') {
+            score += 25;
+            factors.push({ type: 'high', icon: 'fas fa-allergies', text: 'Acanthosis Nigricans (neck/crease darkening)', impact: 'High-specificity clinical biomarker of hyperinsulinemia' });
+        } else if (symptoms.acanthosisNigricans === 'mild') {
+            score += 15;
+            factors.push({ type: 'medium', icon: 'fas fa-allergies', text: 'Mild skin creasing darkening', impact: 'Early cutaneous indicator of insulin resistance' });
+        }
+
+        if (symptoms.sugarCravings === 'severe' || symptoms.sugarCravings === 'moderate') {
+            score += 15;
+            factors.push({ type: 'medium', icon: 'fas fa-cookie-bite', text: 'Post-meal energy crashes & sugar cravings', impact: 'Postprandial reactive hypoglycemia characteristic of PCOS' });
+        }
+
+        return { score: Math.min(100, score), factors };
     }
 
     _analyzeHormonalSymptoms(symptoms) {
         let score = 0, factors = [];
 
         if (symptoms.acne >= 4) {
-            score += 20;
-            factors.push({ type: 'high', icon: 'fas fa-user-injured', text: 'Severe persistent acne', impact: 'Indicates high androgen levels' });
+            score += 25;
+            factors.push({ type: 'high', icon: 'fas fa-user-injured', text: 'Severe jawline/cystic hormonal acne', impact: 'Clear indicator of 5α-reductase androgen hyperactivity' });
         } else if (symptoms.acne >= 3) {
             score += 15;
-            factors.push({ type: 'medium', icon: 'fas fa-user-injured', text: 'Moderate acne', impact: 'Possible hormonal imbalance' });
+            factors.push({ type: 'medium', icon: 'fas fa-user-injured', text: 'Moderate hormonal acne (jawline/chin)', impact: 'Pillar 2 Hyperandrogenism feature' });
         }
 
         if (symptoms.hairFall === 'high') {
             score += 25;
-            factors.push({ type: 'high', icon: 'fas fa-user-alt', text: 'Excessive hair fall/thinning', impact: 'Androgenic alopecia - PCOS sign' });
+            factors.push({ type: 'high', icon: 'fas fa-user-alt', text: 'Diffuse crown & parting hair thinning', impact: 'Androgenic alopecia from DHT follicle sensitivity' });
         } else if (symptoms.hairFall === 'medium') {
             score += 15;
-            factors.push({ type: 'medium', icon: 'fas fa-user-alt', text: 'Moderate hair fall', impact: 'Possible androgen excess' });
+            factors.push({ type: 'medium', icon: 'fas fa-user-alt', text: 'Moderate scalp hair shedding', impact: 'Possible androgen elevation or ferritin deficiency' });
         }
 
         if (symptoms.hirsutism === 'high') {
             score += 30;
-            factors.push({ type: 'high', icon: 'fas fa-venus', text: 'Excessive facial/body hair', impact: 'Clear sign of hyperandrogenism' });
+            factors.push({ type: 'high', icon: 'fas fa-venus', text: 'Excess coarse facial/body hair (Hirsutism)', impact: 'Key hyperandrogenic Rotterdam criterion' });
         } else if (symptoms.hirsutism === 'medium') {
             score += 20;
-            factors.push({ type: 'medium', icon: 'fas fa-venus', text: 'Increased body hair growth', impact: 'Possible PCOS symptom' });
+            factors.push({ type: 'medium', icon: 'fas fa-venus', text: 'Increased chin/upper lip coarse hair', impact: 'Elevated circulating free testosterone marker' });
         }
 
         if (symptoms.moodSwings === 'severe') {
             score += 15;
-            factors.push({ type: 'medium', icon: 'fas fa-brain', text: 'Severe mood swings/depression', impact: 'Hormonal fluctuations affect mood' });
+            factors.push({ type: 'medium', icon: 'fas fa-brain', text: 'Premenstrual Dysphoric Disorder (PMDD) / Mood crashes', impact: 'Progesterone deficiency resulting from anovulatory cycles' });
         }
 
         if (symptoms.sleepQuality === 'poor') {
             score += 10;
-            factors.push({ type: 'low', icon: 'fas fa-moon', text: 'Poor sleep quality', impact: 'May worsen insulin resistance' });
+            factors.push({ type: 'low', icon: 'fas fa-moon', text: 'Fragmented sleep / Elevated night cortisol', impact: 'Cortisol dysregulation worsens insulin resistance' });
         }
 
         return { score, factors };
@@ -373,64 +491,59 @@ class HormoCareAI {
     }
 
     _getRiskLevel(score) {
-        if (score >= 70) return { level: 'high', cssClass: 'high-risk', label: 'High Risk', color: '#E74C3C' };
-        if (score >= 40) return { level: 'moderate', cssClass: 'moderate-risk', label: 'Moderate Risk', color: '#F39C12' };
-        if (score >= 20) return { level: 'low-moderate', cssClass: 'low-moderate-risk', label: 'Low-Moderate Risk', color: '#3498DB' };
-        return { level: 'low', cssClass: 'low-risk', label: 'Low Risk', color: '#2ECC71' };
+        if (score >= 70) return { level: 'high', cssClass: 'high-risk', label: 'High PCOS Probability', color: '#E11D48', badgeBg: '#FFE4E6' };
+        if (score >= 40) return { level: 'moderate', cssClass: 'moderate-risk', label: 'Moderate Endocrine Risk', color: '#F59E0B', badgeBg: '#FEF3C7' };
+        if (score >= 20) return { level: 'low-moderate', cssClass: 'low-moderate-risk', label: 'Low-Moderate Risk', color: '#0EA5E9', badgeBg: '#E0F2FE' };
+        return { level: 'low', cssClass: 'low-risk', label: 'Balanced Hormonal Health', color: '#10B981', badgeBg: '#D1FAE5' };
     }
 
-    _generateRecommendations(score, factors) {
+    _generateRecommendations(score, factors, rotterdam = null) {
         let recs = { immediate: [], diet: [], exercise: [], supplements: [], monitoring: [] };
 
         if (score >= 70) {
-            recs.immediate.push({ priority: 'urgent', icon: 'fas fa-hospital', text: 'Schedule gynecologist appointment within 1-2 weeks', detail: 'High PCOS risk requires immediate professional evaluation. Request comprehensive hormone panel (LH, FSH, testosterone, DHEAS) and pelvic ultrasound.' });
-            recs.immediate.push({ priority: 'urgent', icon: 'fas fa-vial', text: 'Get blood tests: hormone panel + insulin levels', detail: 'Fasting insulin, glucose tolerance test, lipid profile, thyroid function (TSH, T3, T4).' });
+            recs.immediate.push({ priority: 'urgent', icon: 'fas fa-hospital', text: 'Schedule clinical evaluation with a Gynecologist / Endocrinologist', detail: 'High PCOS probability detected. Request full hormone panel (Total & Free Testosterone, DHEA-S, LH/FSH ratio, Fasting Insulin, 2hr Glucose Tolerance Test) and Pelvic Ultrasound.' });
+            recs.immediate.push({ priority: 'urgent', icon: 'fas fa-vial', text: 'Targeted PCOS Blood Work: Insulin Resistance & Androgen Profile', detail: 'Evaluate HOMA-IR, Lipid profile, TSH, Prolactin to rule out thyroid/adrenal mimics.' });
         } else if (score >= 40) {
-            recs.immediate.push({ priority: 'high', icon: 'fas fa-user-md', text: 'Consult gynecologist within 2-4 weeks', detail: 'Moderate risk warrants professional evaluation. Discuss your symptoms and family history.' });
+            recs.immediate.push({ priority: 'high', icon: 'fas fa-user-md', text: 'Consult gynecologist within 2-4 weeks', detail: 'Moderate endocrine risk detected. Bring your HormoCare cycle tracking logs and symptom history to your consultation.' });
         } else if (score >= 20) {
-            recs.immediate.push({ priority: 'medium', icon: 'fas fa-stethoscope', text: 'Discuss symptoms at next doctor visit', detail: 'Monitor symptoms and track patterns. Bring your symptom log to your appointment.' });
+            recs.immediate.push({ priority: 'medium', icon: 'fas fa-stethoscope', text: 'Discuss cycle variance at next wellness checkup', detail: 'Monitor your cycle length patterns and keep logging weekly metabolic markers.' });
         } else {
-            recs.immediate.push({ priority: 'low', icon: 'fas fa-check-circle', text: 'Continue healthy lifestyle habits', detail: 'Your risk is currently low. Keep tracking symptoms for early detection.' });
+            recs.immediate.push({ priority: 'low', icon: 'fas fa-check-circle', text: 'Maintain balanced lifestyle & cycle monitoring', detail: 'Your risk appears low. Continue daily logging to catch any shifts early.' });
         }
 
         recs.diet = [
-            { text: 'Follow low glycemic index (GI) diet', detail: 'Choose whole grains over refined carbs. Brown rice, oats, quinoa instead of white rice/bread.' },
-            { text: 'Increase fiber intake to 25-30g daily', detail: 'Vegetables, fruits, legumes, whole grains. Fiber helps regulate blood sugar and hormones.' },
-            { text: 'Reduce refined sugars and processed foods', detail: 'Limit sweets, packaged snacks, sugary drinks. These spike insulin levels.' },
-            { text: 'Include anti-inflammatory foods', detail: 'Turmeric, berries, leafy greens, fatty fish, nuts. These help reduce PCOS inflammation.' },
-            { text: 'Eat protein with every meal', detail: 'Eggs, paneer, dal, chicken, fish. Protein helps manage blood sugar and keeps you full.' },
-            { text: 'Stay hydrated - 8+ glasses of water daily', detail: 'Proper hydration supports metabolism and helps flush excess hormones.' }
+            { text: 'Structure meals with Low Glycemic Load (GL)', detail: 'Prevent postprandial insulin surges. Pair complex carbs (brown rice, whole wheat roti, oats) with high protein & fiber.' },
+            { text: 'Prioritize 25-30g of protein per main meal', detail: 'Paneer, toor/moong dal, boiled eggs, Greek yogurt, grilled fish/chicken. Protein activates satiety hormones and blunts glucose spikes.' },
+            { text: 'Anti-inflammatory spices & foods', detail: 'Turmeric (curcumin with black pepper), cinnamon, ginger, walnuts, chia seeds, and leafy greens to counteract PCOS systemic inflammation.' },
+            { text: 'Target 30g daily fiber for hormone excretion', detail: 'Dietary fiber binds excess circulating estrogen and androgen metabolites for healthy gut excretion.' },
+            { text: 'Eliminate high-fructose corn syrup & sugary drinks', detail: 'Sugary chai, sodas, and fruit juices overburden the liver and exacerbate peripheral insulin resistance.' }
         ];
 
         recs.exercise = [
-            { text: 'Moderate cardio: 150 minutes/week', detail: 'Brisk walking, cycling, swimming. Start with 20-30 minutes, 5 days/week.' },
-            { text: 'Strength training: 2-3 times/week', detail: 'Bodyweight exercises, resistance bands, or light weights. Builds muscle and improves insulin sensitivity.' },
-            { text: 'Yoga for stress relief: 2-3 times/week', detail: 'Surya Namaskar, Pranayama, Meditation. Reduces cortisol and improves hormonal balance.' },
-            { text: 'Daily step goal: 8,000-10,000 steps', detail: 'Use a pedometer or phone app. Even short walks throughout the day count.' }
+            { text: 'Zone 2 Cardio: 120-150 mins weekly', detail: 'Brisk walking, steady cycling, swimming. Improves mitochondrial fat oxidation without spiking cortisol.' },
+            { text: 'Progressive Resistance / Strength Training (2-3x/week)', detail: 'Squats, lunges, deadlifts, dumbbell presses. Contracting skeletal muscle increases GLUT-4 glucose transporters independently of insulin.' },
+            { text: '10-minute post-meal walks', detail: 'A gentle 10-15 minute walk after lunch and dinner substantially reduces peak postprandial blood sugar spikes.' },
+            { text: 'Vagus nerve & Cortisol management (Yoga/Pranayama)', detail: 'Surya Namaskar, Anulom Vilom, deep belly breathing to lower ACTH and reduce adrenal androgen synthesis.' }
         ];
 
-        if (score >= 40) {
-            recs.exercise.push({ text: 'HIIT workouts: 1-2 times/week', detail: 'Short bursts of intense exercise. Very effective for insulin resistance.' });
+        if (score >= 35) {
+            recs.supplements.push({ name: 'Myo-Inositol & D-Chiro-Inositol (40:1 Ratio)', dosage: '2000mg Myo + 50mg D-Chiro twice daily', benefit: 'Gold standard PCOS supplement: restores ovulation and dramatically improves insulin sensitivity', note: 'Clinically proven in international endocrinology trials' });
+            recs.supplements.push({ name: 'Organic Spearmint Tea', dosage: '2 cups daily between meals', benefit: 'Clinically documented to reduce free testosterone, hirsutism, and hormonal jawline acne', note: 'Natural anti-androgenic herbal support' });
+            recs.supplements.push({ name: 'Vitamin D3 + K2', dosage: '2000-4000 IU daily', benefit: 'Up to 85% of women with PCOS are Vitamin D deficient; supports ovarian follicular development', note: 'Best taken with a meal containing healthy fats' });
+            recs.supplements.push({ name: 'Omega-3 Fatty Acids (EPA/DHA)', dosage: '1000-1500mg daily', benefit: 'Reduces vascular inflammation, improves lipid ratios, and supports healthy cell membranes', note: 'Fish oil or algae-based vegan omega-3' });
+        }
+        if (score >= 20) {
+            recs.supplements.push({ name: 'Magnesium Glycinate', dosage: '200-300mg before bed', benefit: 'Supports glucose metabolism, reduces PMS/PMDD anxiety, and promotes deep restorative sleep', note: 'Highly absorbable gentle form' });
         }
 
         recs.monitoring = [
-            'Track menstrual cycles daily',
-            'Monitor weight weekly (same time, same conditions)',
-            'Log mood and energy levels',
-            'Track sleep quality and duration',
-            'Photo-document skin and hair changes monthly',
-            'Record diet and exercise activities'
+            'Log cycle start date & track cycle length variations',
+            'Weekly morning weigh-in under identical conditions',
+            'Monitor for dark skin patches (Acanthosis Nigricans)',
+            'Note jawline acne flares during luteal phase',
+            'Track post-meal energy crashes & sugar cravings',
+            'Record sleep duration & wake-up refreshment levels'
         ];
-
-        if (score >= 40) {
-            recs.supplements.push({ name: 'Myo-inositol', dosage: '2-4g daily', benefit: 'Improves insulin sensitivity and ovulation', note: 'One of the most studied supplements for PCOS' });
-            recs.supplements.push({ name: 'Vitamin D', dosage: '2000-4000 IU daily', benefit: 'Often deficient in PCOS, supports hormone balance', note: 'Get levels tested first' });
-            recs.supplements.push({ name: 'Omega-3 fatty acids', dosage: '1000-2000mg daily', benefit: 'Reduces inflammation and improves insulin sensitivity', note: 'Fish oil or flaxseed oil' });
-            recs.supplements.push({ name: 'Spearmint tea', dosage: '2 cups daily', benefit: 'May help reduce androgen levels naturally', note: 'Can help with hirsutism' });
-        }
-        if (score >= 20) {
-            recs.supplements.push({ name: 'Chromium', dosage: '200-1000mcg daily', benefit: 'Helps regulate blood sugar levels', note: 'Especially if insulin resistant' });
-        }
 
         return recs;
     }
@@ -439,7 +552,12 @@ class HormoCareAI {
     persist() {
         this.data.lastUpdated = Date.now();
         try {
-            localStorage.setItem('hormocare_data', JSON.stringify(this.data));
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('hormocare_data', JSON.stringify(this.data));
+            }
+            if (typeof window !== 'undefined' && window.HormoCareStorage) {
+                window.HormoCareStorage.saveAppData(this.data);
+            }
         } catch (e) {
             console.error('Error saving data:', e);
         }
@@ -447,16 +565,31 @@ class HormoCareAI {
 
     loadData() {
         try {
-            const saved = localStorage.getItem('hormocare_data');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                this.data = {
-                    profile: parsed.profile || {},
-                    symptoms: parsed.symptoms || [],
-                    dietEntries: parsed.dietEntries || [],
-                    riskAssessment: parsed.riskAssessment || null,
-                    lastUpdated: parsed.lastUpdated
-                };
+            if (typeof localStorage !== 'undefined') {
+                const saved = localStorage.getItem('hormocare_data');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    this.data = {
+                        profile: parsed.profile || {},
+                        symptoms: parsed.symptoms || [],
+                        dietEntries: parsed.dietEntries || [],
+                        riskAssessment: parsed.riskAssessment || null,
+                        lastUpdated: parsed.lastUpdated
+                    };
+                }
+            }
+            if (typeof window !== 'undefined' && window.HormoCareStorage) {
+                window.HormoCareStorage.getAppData().then(serverData => {
+                    if (serverData && serverData.lastUpdated && (!this.data.lastUpdated || serverData.lastUpdated > this.data.lastUpdated)) {
+                        this.data = {
+                            profile: serverData.profile || {},
+                            symptoms: serverData.symptoms || [],
+                            dietEntries: serverData.dietEntries || [],
+                            riskAssessment: serverData.riskAssessment || null,
+                            lastUpdated: serverData.lastUpdated
+                        };
+                    }
+                }).catch(() => {});
             }
         } catch (e) {
             console.error('Error loading data:', e);
@@ -571,3 +704,7 @@ class HormoCareAI {
 }
 
 const hormoCareApp = new HormoCareAI();
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = HormoCareAI;
+}

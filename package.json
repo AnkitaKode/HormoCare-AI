@@ -1,0 +1,19 @@
+{
+  "name": "hormocare-ai",
+  "version": "1.0.0",
+  "description": "Early PCOS Risk Detection & Health Management System for Indian Women with Local Data Storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "pcos",
+    "healthcare",
+    "ai",
+    "local-storage",
+    "women-health"
+  ],
+  "author": "HormoCare AI Team",
+  "license": "MIT"
+}

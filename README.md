@@ -139,30 +139,103 @@ class HormoCareAI {
 ## 🚀 Getting Started
 
 ### Prerequisites
+- **Node.js** (v16 or higher recommended; v24 supported)
 - Modern web browser (Chrome, Firefox, Safari, Edge)
-- No additional software required
 
+### Quick Start (Recommended)
+
+1. **Start the Local Server**:
+   ```bash
+   # Option A: With npm
+   npm start
+
+   # Option B: With Node directly (zero external dependencies required)
+   node server.js
+
+   # Option C: On Windows, double-click run.bat or start.bat
+   run.bat
+   ```
+
+2. **Open in Browser**:
+   Open **[http://localhost:3000](http://localhost:3000)** (or `start.html` for the project hub).
+
+3. **Explore Features & Sample Data**:
+   - Click the **"Local Disk DB Active"** badge in the navbar to open the **Data Management Hub**.
+   - Click **"Load Sample PCOS Patient Data"** to instantly populate 14 days of realistic cycle logs, symptoms, diet entries, doctor appointments, and orders to test the AI risk analysis right away!
+
+4. **Standalone Mode (Optional)**:
+   - If Node.js is not running, you can also double-click `index.html` or `start.html` directly in your browser. The application will smoothly fall back to browser `localStorage` mode.
 
 ### Project Structure
 ```
 hormocare-ai/
-├── index.html              # Main landing page
-├── presentation.html       # Pitch presentation
-├── styles/
-│   ├── main.css           # Main application styles
-│   └── presentation.css   # Presentation styles
+├── package.json              # Project configuration and npm scripts
+├── server.js                 # Native Node.js local HTTP & REST API server
+├── run.bat                   # 1-click Windows launcher
+├── start.bat                 # Shortcut launcher
+├── index.html                # Main landing page & 5-step AI assessment
+├── start.html                # Project hub with links to all modules
+├── diet-tracker.html         # Daily meals, nutrition macros & water tracking
+├── meal-plan.html            # 7-day PCOS-friendly meal plans (Veg/Non-Veg/Mixed)
+├── doctor-consultation.html  # Book gynecologist consultations & upload reports
+├── medicine-store.html       # Supplements store, cart & order history
+├── reviews.html              # Verified reviews, ratings & feedback
+├── presentation.html         # Investor pitch deck
+├── data/                     # Persistent local storage directory
+│   ├── hormocare_db.json     # Main JSON database file (local data storing)
+│   └── uploads/              # Local disk storage for uploaded medical reports
 ├── js/
-│   ├── main.js           # Core functionality
-│   └── app.js            # AI algorithm and advanced features
-└── README.md             # Project documentation
+│   ├── storage.js            # Unified local storage manager & Data Hub modal
+│   ├── app.js                # AI risk algorithm & food database
+│   └── main.js               # Interactive UI & assessment workflow
+└── styles/
+    ├── main.css              # Main application styling
+    └── presentation.css      # Presentation styling
 ```
 
-### Usage
+## 💾 Local Data Storing & Persistence
 
-1. **Visit Landing Page** - Open `index.html` in your browser
-2. **Explore Features** - Navigate through different sections
-3. **Try the Demo** - Click "Start Free Assessment" 
-4. **View Presentation** - Open `presentation.html` for the pitch deck
+HormoCare AI features a **dual-layer local persistence architecture**:
+
+1. **Local Disk Database (`data/hormocare_db.json`)**:
+   - All profile data, symptom logs, diet history, checklist states, consultation bookings, store orders, and reviews are saved directly to disk.
+   - Uploaded medical reports (PDF, JPG, PNG) are stored physically in `data/uploads/` on your machine.
+   - Data persists across system restarts, browser clears, and multiple browser tabs.
+
+2. **Client-Side Storage Adapter (`js/storage.js`)**:
+   - Automatically probes the local server at startup.
+   - If connected, synchronizes read/writes directly with the local database.
+   - If offline or opened via `file://`, falls back to `localStorage` with zero errors.
+
+3. **Data Management Hub (Built-in GUI Modal)**:
+   - Click the green **"Local Disk DB Active"** pill in the navigation bar on any page.
+   - **Export Backup (JSON)**: Download a complete backup of all health data.
+   - **Import Backup (JSON)**: Restore your saved data anytime.
+   - **Load Sample Data**: Test the full AI assessment workflow with 14 days of realistic PCOS symptoms in 1 click.
+   - **Reset Stored Data**: Clear data back to initial defaults.
+
+## 📡 REST API Reference (Local Server)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/status` | Server health, database path, and summary counts |
+| `GET` | `/api/data` | Get profile, symptoms, diet logs & risk assessment |
+| `POST` | `/api/data` | Save profile, symptoms, or diet entries |
+| `GET` | `/api/bookings` | List doctor consultation bookings |
+| `POST` | `/api/bookings` | Create new doctor consultation booking |
+| `DELETE` | `/api/bookings/:id` | Cancel doctor consultation booking |
+| `GET` | `/api/orders` | List medicine store orders |
+| `POST` | `/api/orders` | Place new medicine store order |
+| `GET` | `/api/reports` | List uploaded medical reports |
+| `POST` | `/api/reports` | Upload report file (saved to `data/uploads/`) |
+| `GET` | `/api/reports/download/:file` | Download/view uploaded medical report |
+| `DELETE` | `/api/reports/:id` | Delete report file from disk and database |
+| `GET` | `/api/reviews` | Get user-submitted reviews |
+| `POST` | `/api/reviews` | Submit a new user review |
+| `GET` | `/api/export` | Download complete database as JSON backup file |
+| `POST` | `/api/import` | Restore database from JSON backup file |
+| `POST` | `/api/sample-data` | Populate 14-day sample PCOS patient dataset |
+| `POST` | `/api/reset` | Reset all local data to clean defaults |
 
 ## 🧪 Testing the AI Algorithm
 
@@ -339,6 +412,6 @@ hormocare-ai/
 
 ---
 
-**HormoCare AI** - Empowering women with early PCOS detection through AI-powered health insights.
+**HormoCare** - Empowering women with early PCOS detection through AI-powered health insights.
 
 *Making preventive healthcare accessible, one woman at a time.* 🌸

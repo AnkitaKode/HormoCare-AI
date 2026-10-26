@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HormoCare AI - Early PCOS Risk Detection for Indian Women</title>
+    <title>HormoCare - Early PCOS Risk Detection for Indian Women</title>
     <link rel="stylesheet" href="styles/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,17 +15,19 @@
             <a href="#home" class="logo" style="text-decoration:none">
                 <i class="fas fa-heartbeat"></i>
                 <span>HormoCare AI</span>
+                <span class="nav-pcos-pill">PCOS CARE</span>
             </a>
             <div class="nav-menu">
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#about" class="nav-link">About PCOS</a>
+                <a href="#rotterdam" class="nav-link">Rotterdam Criteria</a>
                 <a href="#features" class="nav-link">Features</a>
                 <a href="#app" class="nav-link">Get Started</a>
                 <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
                 <a href="meal-plan.html" class="nav-link">Meal Plan</a>
                 <a href="doctor-consultation.html" class="nav-link">Doctors</a>
                 <a href="medicine-store.html" class="nav-link">Store</a>
-                <a href="reviews.html" class="nav-link diet-link"><i class="fas fa-star"></i> Reviews</a>
+                <a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a>
             </div>
             <button class="nav-toggle">
                 <span></span>
@@ -39,22 +41,24 @@
     <section id="home" class="hero">
         <div class="hero-container">
             <div class="hero-content">
+                <div class="pcos-ribbon-badge">
+                    <i class="fas fa-ribbon"></i> Official PCOS Healthcare Platform
+                </div>
                 <h1 class="hero-title">
-                    Early PCOS Detection<br>
-                    <span class="gradient-text">Powered by AI</span>
+                    PCOS Screening & Care<br>
+                    <span class="gradient-text">Rotterdam Consensus AI</span>
                 </h1>
                 <p class="hero-subtitle">
-                    1 in 5 Indian women suffers from PCOS. Many cases go undiagnosed for years.
-                    HormoCare AI helps detect early warning signs through smart symptom tracking.
+                    1 in 5 Indian women lives with Polycystic Ovary Syndrome (PCOS). HormoCare AI tracks ovulatory dysfunction, androgen excess, and insulin resistance — categorizing your profile across 4 international PCOS phenotypes.
                 </p>
                 <div class="hero-stats">
                     <div class="stat">
                         <span class="stat-number">20%</span>
-                        <span class="stat-label">of Indian women have PCOS</span>
+                        <span class="stat-label">of Indian women affected</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">70%</span>
-                        <span class="stat-label">cases go undiagnosed</span>
+                        <span class="stat-label">cases remain undiagnosed</span>
                     </div>
                 </div>
                 <div class="hero-buttons">
@@ -63,33 +67,49 @@
                         Start Free Assessment
                     </button>
                     <button class="btn btn-secondary" onclick="learnMore()">
-                        <i class="fas fa-info-circle"></i>
-                        Learn More
+                        <i class="fas fa-microscope"></i>
+                        Rotterdam Criteria
                     </button>
                 </div>
             </div>
             <div class="hero-image">
-                <div class="app-mockup">
-                    <div class="phone-frame">
-                        <div class="screen">
-                            <div class="app-preview">
-                                <div class="preview-header">
-                                    <div class="preview-logo">🌸</div>
-                                    <h3>HormoCare AI</h3>
-                                </div>
-                                <div class="risk-indicator">
-                                    <div class="risk-circle low-risk">
-                                        <span>Low Risk</span>
-                                        <div class="score">15%</div>
-                                    </div>
-                                </div>
-                                <div class="preview-features">
-                                    <div class="feature-item">📊 Cycle Tracking</div>
-                                    <div class="feature-item">🎯 Risk Analysis</div>
-                                    <div class="feature-item">💡 Smart Insights</div>
-                                </div>
+                <div class="pcos-compass-card">
+                    <div class="pcos-compass-header">
+                        <div class="pcos-compass-title">
+                            <i class="fas fa-ribbon"></i>
+                            <span>Endocrine Compass</span>
+                        </div>
+                        <span class="pcos-live-chip">Live Clinical AI</span>
+                    </div>
+                    <div class="compass-dial-wrap">
+                        <div class="compass-dial">
+                            <span class="dial-pct">15%</span>
+                            <span class="dial-sub">Low Risk</span>
+                        </div>
+                    </div>
+                    <div class="compass-pillars-preview">
+                        <div class="compass-pillar-item">
+                            <span class="lbl"><i class="fas fa-calendar-alt" style="color:var(--pcos-teal); margin-right:6px;"></i> Ovulatory Regularity</span>
+                            <div class="compass-pillar-bar">
+                                <div class="compass-pillar-fill" style="width: 25%; background: var(--pcos-teal);"></div>
                             </div>
                         </div>
+                        <div class="compass-pillar-item">
+                            <span class="lbl"><i class="fas fa-venus" style="color:var(--pcos-coral); margin-right:6px;"></i> Androgen Balance</span>
+                            <div class="compass-pillar-bar">
+                                <div class="compass-pillar-fill" style="width: 18%; background: var(--pcos-coral);"></div>
+                            </div>
+                        </div>
+                        <div class="compass-pillar-item">
+                            <span class="lbl"><i class="fas fa-fire-alt" style="color:var(--pcos-rose); margin-right:6px;"></i> Insulin Sensitivity</span>
+                            <div class="compass-pillar-bar">
+                                <div class="compass-pillar-fill" style="width: 20%; background: var(--pcos-rose);"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="compass-footer-badge">
+                        <i class="fas fa-check-circle" style="color:var(--pcos-teal);"></i>
+                        Rotterdam Consensus & Phenotype Ready
                     </div>
                 </div>
             </div>
@@ -120,6 +140,96 @@
                     <div class="problem-icon">🚨</div>
                     <h3>Serious Consequences</h3>
                     <p>Untreated PCOS leads to infertility, obesity, diabetes, and cardiovascular disease.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rotterdam Consensus & 4 Phenotypes Section -->
+    <section id="rotterdam" class="pcos-consensus-section">
+        <div class="container">
+            <div class="pcos-consensus-header">
+                <div class="pcos-ribbon-badge">
+                    <i class="fas fa-microscope"></i> Clinical Diagnostic Standard
+                </div>
+                <h2>The Rotterdam Diagnostic Consensus</h2>
+                <p>
+                    International clinical guidelines require at least <strong>2 out of 3 criteria</strong> to diagnose PCOS (after excluding other causes). HormoCare AI evaluates all three pillars continuously to provide actionable clinical clarity.
+                </p>
+            </div>
+
+            <div class="rotterdam-grid">
+                <div class="rotterdam-card">
+                    <div class="rotterdam-card-num">01</div>
+                    <h3>Ovulatory Dysfunction</h3>
+                    <p>Infrequent, irregular (cycles &lt; 21 or &gt; 35 days), or completely absent menstrual periods indicating chronic anovulation.</p>
+                    <ul class="rotterdam-markers">
+                        <li><i class="fas fa-check"></i> Oligomenorrhea (&gt;35-day cycles)</li>
+                        <li><i class="fas fa-check"></i> Amenorrhea (missing 3+ periods)</li>
+                        <li><i class="fas fa-check"></i> Follicular delay & luteal defect</li>
+                    </ul>
+                </div>
+
+                <div class="rotterdam-card">
+                    <div class="rotterdam-card-num">02</div>
+                    <h3>Hyperandrogenism</h3>
+                    <p>Clinical or biochemical signs of elevated male sex hormones (testosterone, DHEA-S) affecting skin, sebum, and follicles.</p>
+                    <ul class="rotterdam-markers">
+                        <li><i class="fas fa-check"></i> Hormonal cystic jawline acne</li>
+                        <li><i class="fas fa-check"></i> Facial hirsutism (chin, upper lip)</li>
+                        <li><i class="fas fa-check"></i> Crown thinning (androgenic alopecia)</li>
+                    </ul>
+                </div>
+
+                <div class="rotterdam-card">
+                    <div class="rotterdam-card-num">03</div>
+                    <h3>Metabolic & Morphology</h3>
+                    <p>Polycystic ovarian morphology (12+ antral follicles via ultrasound) coupled with hyperinsulinemia and insulin resistance.</p>
+                    <ul class="rotterdam-markers">
+                        <li><i class="fas fa-check"></i> Acanthosis Nigricans (dark skin folds)</li>
+                        <li><i class="fas fa-check"></i> Sugar cravings & post-meal crashes</li>
+                        <li><i class="fas fa-check"></i> Central/visceral weight resistance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phenotypes-container">
+                <div class="phenotypes-title">
+                    <h3>The 4 International PCOS Phenotypes</h3>
+                    <p>PCOS manifests differently in every woman. Our algorithm categorizes your symptoms into 4 clinical phenotypes.</p>
+                </div>
+                <div class="phenotype-cards-grid">
+                    <div class="phenotype-item">
+                        <span class="phenotype-item-badge badge-pheno-a">PHENOTYPE A</span>
+                        <h4>Classic / Full PCOS</h4>
+                        <div class="pheno-criteria">Ovulatory + Androgen + Metabolic</div>
+                        <p>Most common & severe presentation with high metabolic and reproductive risk.</p>
+                        <div class="pheno-focus"><strong>Focus:</strong> Inositol 40:1, low glycemic load Indian diet, insulin sensitization.</div>
+                    </div>
+
+                    <div class="phenotype-item">
+                        <span class="phenotype-item-badge badge-pheno-b">PHENOTYPE B</span>
+                        <h4>Non-PCO Morphology</h4>
+                        <div class="pheno-criteria">Ovulatory + Androgen Excess</div>
+                        <p>High androgen signs and irregular cycles without dense ultrasound polycystic ovaries.</p>
+                        <div class="pheno-focus"><strong>Focus:</strong> Spearmint anti-androgenic tea, hormonal balancing, stress management.</div>
+                    </div>
+
+                    <div class="phenotype-item">
+                        <span class="phenotype-item-badge badge-pheno-c">PHENOTYPE C</span>
+                        <h4>Ovulatory PCOS</h4>
+                        <div class="pheno-criteria">Androgen Excess + Polycystic</div>
+                        <p>Regular menstrual cycles with marked acne, hirsutism, and ultrasound polycystic ovaries.</p>
+                        <div class="pheno-focus"><strong>Focus:</strong> Skin barrier care, androgen suppression, zinc & omega-3 support.</div>
+                    </div>
+
+                    <div class="phenotype-item">
+                        <span class="phenotype-item-badge badge-pheno-d">PHENOTYPE D</span>
+                        <h4>Normoandrogenic</h4>
+                        <div class="pheno-criteria">Ovulatory + Polycystic Ovaries</div>
+                        <p>Mildest phenotype without androgen excess; common in lean women with irregular periods.</p>
+                        <div class="pheno-focus"><strong>Focus:</strong> Cortisol regulation, nutrient-dense diet, gentle cycle rhythm.</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,6 +367,7 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
     <script src="js/main.js"></script>
 </body>

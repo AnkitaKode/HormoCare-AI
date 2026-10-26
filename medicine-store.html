@@ -310,6 +310,115 @@
             justify-content: center;
             gap: 0.5rem;
         }
+        .store-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .orders-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .orders-modal.active {
+            display: flex;
+        }
+        .orders-content {
+            background: white;
+            width: 92%;
+            max-width: 650px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: popIn 0.25s ease-out;
+        }
+        .orders-header {
+            padding: 1.2rem 1.5rem;
+            background: var(--gradient);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .orders-header h3 {
+            margin: 0;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .orders-list {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .order-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: var(--radius-sm);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid #EDF2F7;
+            padding-bottom: 0.5rem;
+        }
+        .order-id {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .order-status {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #EBF8FF;
+            color: #2B6CB0;
+        }
+        .order-status.delivered {
+            background: #F0FFF4;
+            color: #276749;
+        }
+        .checkout-form-group {
+            margin-bottom: 1rem;
+        }
+        .checkout-form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+        .checkout-form-group input, .checkout-form-group select, .checkout-form-group textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius-sm);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+        .checkout-form-group input:focus, .checkout-form-group select:focus, .checkout-form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
         @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: 1fr;
@@ -323,12 +432,16 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-heartbeat"></i>
                 <span>HormoCare AI</span>
+                <span class="nav-pcos-pill">PCOS CARE</span>
             </a>
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="index.html#app" class="nav-link">Tracker</a>
-                <a href="doctor-consultation.html" class="nav-link">Doctors</a>
+                <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                <a href="doctor-consultation.html" class="nav-link"><i class="fas fa-stethoscope"></i> Doctors</a>
                 <a href="medicine-store.html" class="nav-link diet-link active"><i class="fas fa-capsules"></i> Store</a>
+                <a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a>
             </div>
             <button class="nav-toggle">
                 <span></span>
@@ -344,8 +457,13 @@
         <h2 class="section-title">PCOS Supplements & Medicine Store</h2>
         <p class="form-subtitle">Doctor-recommended supplements and medicines for PCOS management with home delivery</p>
 
-        <div class="delivery-badge">
-            <i class="fas fa-shipping-fast"></i> Free home delivery on orders above ₹999
+        <div class="store-top-bar">
+            <div class="delivery-badge" style="margin-bottom:0;">
+                <i class="fas fa-shipping-fast"></i> Free home delivery on orders above ₹999
+            </div>
+            <button class="btn btn-secondary" onclick="openOrders()" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem;">
+                <i class="fas fa-box"></i> My Orders (<span id="myOrdersCount">0</span>)
+            </button>
         </div>
 
         <!-- Filter Tabs -->
@@ -378,27 +496,83 @@
             </div>
             <div class="cart-items" id="cartItems"></div>
             <div class="cart-total" id="cartTotal"></div>
-            <button class="btn btn-primary" style="width:100%" onclick="checkout()">
+            <button class="btn btn-primary" style="width:100%" onclick="openCheckout()">
                 <i class="fas fa-check-circle"></i> Proceed to Checkout
             </button>
         </div>
     </div>
 
+    <!-- Checkout Modal -->
+    <div class="orders-modal" id="checkoutModal">
+        <div class="orders-content" style="max-width: 520px;">
+            <div class="orders-header">
+                <h3><i class="fas fa-truck"></i> Delivery & Payment</h3>
+                <button class="close-cart" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+            </div>
+            <div style="padding:1.5rem; overflow-y:auto;">
+                <form id="checkoutForm" onsubmit="confirmOrder(event)">
+                    <div class="checkout-form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="custName" placeholder="e.g. Ananya Sharma" required>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="custPhone" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label>Delivery Address *</label>
+                        <textarea id="custAddress" rows="2" placeholder="House/Flat No., Street, Landmark" required></textarea>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label>City & Pincode *</label>
+                        <input type="text" id="custCityPincode" placeholder="e.g. Bengaluru - 560034" required>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label>Payment Method</label>
+                        <select id="custPayment">
+                            <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                            <option value="UPI (GPay / PhonePe / Paytm)">UPI (GPay / PhonePe / Paytm)</option>
+                            <option value="Credit / Debit Card">Credit / Debit Card</option>
+                        </select>
+                    </div>
+
+                    <div id="checkoutSummary" style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; padding:0.9rem; margin-bottom:1.2rem; font-size:0.9rem;"></div>
+
+                    <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">
+                        <i class="fas fa-check-circle"></i> Place Order Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders History Modal -->
+    <div class="orders-modal" id="ordersModal">
+        <div class="orders-content">
+            <div class="orders-header">
+                <h3><i class="fas fa-box"></i> My Order History</h3>
+                <button class="close-cart" onclick="closeOrders()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="orders-list" id="ordersList"></div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
     <script>
         const products = [
             {
                 id: 1,
-                name: 'Myo-Inositol Powder',
+                name: 'Myo & D-Chiro Inositol (40:1)',
                 category: 'supplements',
                 doctorRec: true,
                 icon: '💊',
                 price: 899,
                 originalPrice: 1299,
-                rating: 4.8,
-                reviews: 423,
-                desc: 'Premium quality myo-inositol for PCOS management. Improves insulin sensitivity and ovulation.',
-                benefits: ['Regulates menstrual cycles', 'Improves insulin sensitivity', 'Supports ovulation', '30-day supply']
+                rating: 4.9,
+                reviews: 582,
+                desc: 'Gold standard 40:1 physiological ratio of Myo-Inositol & D-Chiro-Inositol. Clinically proven to restore ovulatory regularity and improve insulin response.',
+                benefits: ['40:1 Physiological Ratio', 'Restores regular ovulation', 'Improves insulin sensitivity', 'Reduces androgenic facial hair']
             },
             {
                 id: 2,
@@ -670,33 +844,156 @@
             `;
         }
 
-        function checkout() {
+        function openCheckout() {
             if (cart.length === 0) return;
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const delivery = subtotal >= 999 ? 0 : 49;
+            const total = subtotal + delivery;
+
+            // Pre-fill profile name if available
+            const prof = (window.hormoCareApp && hormoCareApp.getProfile()) || {};
+            if (prof.name && !document.getElementById('custName').value) {
+                document.getElementById('custName').value = prof.name;
+            }
+
+            document.getElementById('checkoutSummary').innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+                    <span>Items (${cart.reduce((s, i) => s + i.qty, 0)} items)</span>
+                    <strong>₹${subtotal}</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.3rem;">
+                    <span>Delivery</span>
+                    <span style="color:${delivery === 0 ? 'var(--success)' : 'inherit'}; font-weight:600;">${delivery === 0 ? 'FREE' : '₹' + delivery}</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.05rem; font-weight:700; color:var(--primary); border-top:1px dashed #CBD5E0; padding-top:0.4rem; margin-top:0.4rem;">
+                    <span>Amount Payable</span>
+                    <span>₹${total}</span>
+                </div>
+            `;
+
+            closeCart();
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        async function confirmOrder(e) {
+            e.preventDefault();
+            if (cart.length === 0) return;
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const delivery = subtotal >= 999 ? 0 : 49;
+            const total = subtotal + delivery;
+
             const order = {
-                items: cart,
-                total: cart.reduce((sum, item) => sum + (item.price * item.qty), 0),
+                id: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+                items: [...cart],
+                subtotal,
+                delivery,
+                total,
+                status: 'Order Confirmed - Preparing for Dispatch',
+                customer: {
+                    name: document.getElementById('custName').value,
+                    phone: document.getElementById('custPhone').value,
+                    address: document.getElementById('custAddress').value + ', ' + document.getElementById('custCityPincode').value,
+                    paymentMethod: document.getElementById('custPayment').value
+                },
                 date: new Date().toISOString()
             };
-            let orders = [];
-            try { orders = JSON.parse(localStorage.getItem('hormocare_orders') || '[]'); } catch (e) {}
-            orders.push(order);
-            localStorage.setItem('hormocare_orders', JSON.stringify(orders));
-            alert('Order placed successfully! You will receive a confirmation email with tracking details.');
+
+            if (window.HormoCareStorage) {
+                await window.HormoCareStorage.saveOrder(order);
+            } else {
+                let orders = [];
+                try { orders = JSON.parse(localStorage.getItem('hormocare_orders') || '[]'); } catch (e) {}
+                orders.unshift(order);
+                localStorage.setItem('hormocare_orders', JSON.stringify(orders));
+            }
+
+            alert(`🎉 Order placed successfully!\n\nOrder ID: ${order.id}\nTotal: ₹${total}\n\nWe will send dispatch updates to ${order.customer.phone}.`);
+            
             cart = [];
             saveCart();
-            closeCart();
+            closeCheckout();
             updateCartCount();
+            await loadOrders();
+            openOrders();
+        }
+
+        async function openOrders() {
+            await renderOrders();
+            document.getElementById('ordersModal').classList.add('active');
+        }
+
+        function closeOrders() {
+            document.getElementById('ordersModal').classList.remove('active');
+        }
+
+        async function renderOrders() {
+            let orders = [];
+            if (window.HormoCareStorage) {
+                orders = await window.HormoCareStorage.getOrders();
+            } else {
+                try { orders = JSON.parse(localStorage.getItem('hormocare_orders') || '[]'); } catch (e) {}
+            }
+
+            const list = document.getElementById('ordersList');
+            if (!orders || orders.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:var(--text-light); padding:2rem 0;">No past orders found.</p>';
+                return;
+            }
+
+            list.innerHTML = orders.map(o => `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div>
+                            <span class="order-id">${o.id}</span>
+                            <span style="font-size:0.8rem; color:#718096; margin-left:0.5rem;">${new Date(o.date).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}</span>
+                        </div>
+                        <span class="order-status ${o.status.includes('Delivered') ? 'delivered' : ''}">${o.status}</span>
+                    </div>
+                    <div style="margin-bottom:0.8rem;">
+                        ${(o.items || []).map(i => `
+                            <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:0.25rem;">
+                                <span>${i.name} × ${i.qty}</span>
+                                <strong>₹${i.price * i.qty}</strong>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #EDF2F7; padding-top:0.6rem; font-size:0.85rem; color:#4A5568;">
+                        <div>
+                            <i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> ${o.customer ? o.customer.address : 'Standard Delivery'}
+                        </div>
+                        <div style="font-size:1rem; font-weight:700; color:var(--text-dark);">
+                            Total: <span style="color:var(--primary);">₹${o.total}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadOrders() {
+            let orders = [];
+            if (window.HormoCareStorage) {
+                orders = await window.HormoCareStorage.getOrders();
+            } else {
+                try { orders = JSON.parse(localStorage.getItem('hormocare_orders') || '[]'); } catch (e) {}
+            }
+            document.getElementById('myOrdersCount').textContent = orders.length;
         }
 
         function saveCart() {
             localStorage.setItem('hormocare_cart', JSON.stringify(cart));
         }
 
-        function loadCart() {
+        async function loadCart() {
             try {
                 const saved = localStorage.getItem('hormocare_cart');
                 if (saved) cart = JSON.parse(saved);
                 updateCartCount();
+                await loadOrders();
             } catch (e) {
                 console.error('Error loading cart:', e);
             }

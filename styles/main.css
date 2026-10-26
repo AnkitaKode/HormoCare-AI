@@ -18,25 +18,48 @@ body {
     padding: 0 20px;
 }
 
-/* Color Scheme */
+/* Color Scheme - PCOS Endocrine Health & Awareness Palette */
 :root {
-    --primary: #FF6B9D;
-    --primary-dark: #E85A87;
-    --secondary: #4ECDC4;
-    --accent: #45B7D1;
-    --gradient: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
-    --text-dark: #2C3E50;
-    --text-light: #7F8C8D;
-    --bg-light: #F8F9FA;
-    --success: #2ECC71;
-    --warning: #F39C12;
-    --danger: #E74C3C;
-    --info: #3498DB;
-    --shadow: 0 10px 30px rgba(0,0,0,0.1);
-    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
-    --shadow-sm: 0 4px 12px rgba(0,0,0,0.08);
-    --radius: 12px;
-    --radius-lg: 20px;
+    /* Official PCOS Awareness Colors */
+    --pcos-teal: #0D9488;
+    --pcos-teal-dark: #0F766E;
+    --pcos-teal-light: #CCFBF1;
+    --pcos-teal-soft: #F0FDFA;
+    --pcos-rose: #E11D48;
+    --pcos-coral: #FB7185;
+    --pcos-coral-light: #FFE4E6;
+    --pcos-lavender: #8B5CF6;
+    --pcos-lavender-light: #F3E8FF;
+    --pcos-sage: #10B981;
+    --pcos-sage-light: #D1FAE5;
+    --pcos-cream: #FAF7F5;
+
+    /* Theme Variables */
+    --primary: #0D9488;
+    --primary-dark: #0F766E;
+    --secondary: #FB7185;
+    --accent: #14B8A6;
+    --gradient: linear-gradient(135deg, #0D9488 0%, #14B8A6 45%, #FB7185 100%);
+    --gradient-teal: linear-gradient(135deg, #0D9488 0%, #0F766E 100%);
+    --gradient-rose: linear-gradient(135deg, #FB7185 0%, #E11D48 100%);
+    --gradient-lavender: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+    --gradient-soft: linear-gradient(135deg, #F0FDFA 0%, #FFF1F2 100%);
+    
+    --text-dark: #1E293B;
+    --text-light: #64748B;
+    --bg-light: #F8FAFC;
+    --bg-warm: #FAF7F5;
+    
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #0284C7;
+    
+    --shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.1), 0 8px 10px -6px rgba(13, 148, 136, 0.05);
+    --shadow-lg: 0 20px 35px -10px rgba(13, 148, 136, 0.15);
+    --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.06);
+    --radius: 14px;
+    --radius-lg: 22px;
     --radius-sm: 8px;
 }
 
@@ -147,8 +170,12 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #FFE5F1 0%, #E8F5FF 100%);
+    background: radial-gradient(circle at 15% 20%, rgba(13, 148, 136, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(251, 113, 133, 0.14) 0%, transparent 45%),
+                linear-gradient(135deg, #FAF7F5 0%, #F0FDFA 50%, #FFF1F2 100%);
     padding-top: 80px;
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-container {
@@ -1925,3 +1952,615 @@ body {
         min-width: 110px;
     }
 }
+
+/* ==================== PCOS Healthcare Visual Identity ==================== */
+
+/* PCOS Awareness Ribbon & Tags */
+.pcos-ribbon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    background: linear-gradient(135deg, rgba(13, 148, 136, 0.12) 0%, rgba(251, 113, 133, 0.12) 100%);
+    border: 1px solid rgba(13, 148, 136, 0.25);
+    border-radius: 50px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--pcos-teal-dark);
+    margin-bottom: 1.2rem;
+    text-transform: uppercase;
+}
+
+.pcos-ribbon-badge i, .pcos-ribbon-badge span.ribbon-icon {
+    color: var(--pcos-teal);
+    font-size: 1rem;
+}
+
+.nav-pcos-pill {
+    background: rgba(13, 148, 136, 0.12);
+    color: var(--pcos-teal);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+}
+
+/* PCOS Compass Hero Card */
+.pcos-compass-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px -15px rgba(13, 148, 136, 0.2), 0 10px 20px -10px rgba(251, 113, 133, 0.15);
+    border: 1px solid rgba(13, 148, 136, 0.15);
+    padding: 2rem;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.pcos-compass-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.pcos-compass-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text-dark);
+}
+
+.pcos-compass-title i {
+    color: var(--pcos-teal);
+    font-size: 1.2rem;
+}
+
+.pcos-live-chip {
+    background: #DEF7EC;
+    color: #03543F;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.pcos-live-chip::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #0E9F6E;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pcosPulse 2s infinite;
+}
+
+@keyframes pcosPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.compass-dial-wrap {
+    text-align: center;
+    margin: 1.2rem 0;
+}
+
+.compass-dial {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 8px solid var(--pcos-teal);
+    background: radial-gradient(circle, #F0FDFA 0%, #FFFFFF 100%);
+    box-shadow: inset 0 2px 8px rgba(13, 148, 136, 0.1);
+}
+
+.compass-dial .dial-pct {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--pcos-teal-dark);
+    line-height: 1;
+}
+
+.compass-dial .dial-sub {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+.compass-pillars-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin: 1.2rem 0;
+}
+
+.compass-pillar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.82rem;
+}
+
+.compass-pillar-item span.lbl {
+    flex: 1;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.compass-pillar-bar {
+    width: 90px;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.compass-pillar-fill {
+    height: 100%;
+    border-radius: 4px;
+}
+
+.compass-footer-badge {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid #F1F5F9;
+    font-size: 0.78rem;
+    color: var(--text-light);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+/* ==================== Educational Rotterdam & Phenotypes Section ==================== */
+.pcos-consensus-section {
+    padding: 5.5rem 0;
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAF7F5 100%);
+    position: relative;
+}
+
+.pcos-consensus-header {
+    text-align: center;
+    max-width: 780px;
+    margin: 0 auto 3.5rem;
+}
+
+.pcos-consensus-header h2 {
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0.8rem 0 1rem;
+}
+
+.pcos-consensus-header p {
+    color: var(--text-light);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.rotterdam-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.8rem;
+    margin-bottom: 3rem;
+}
+
+.rotterdam-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 2rem 1.6rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.rotterdam-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: var(--pcos-teal);
+}
+
+.rotterdam-card-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--pcos-teal-light);
+    color: var(--pcos-teal-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.rotterdam-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+}
+
+.rotterdam-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    flex: 1;
+}
+
+.rotterdam-markers {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #F1F5F9;
+    padding-top: 1rem;
+}
+
+.rotterdam-markers li {
+    font-size: 0.82rem;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rotterdam-markers li i {
+    color: var(--pcos-teal);
+    font-size: 0.75rem;
+}
+
+/* 4 Phenotypes Showcase */
+.phenotypes-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    border: 1px solid rgba(13, 148, 136, 0.2);
+    box-shadow: var(--shadow);
+}
+
+.phenotypes-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.phenotypes-title h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+}
+
+.phenotypes-title p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.phenotype-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+}
+
+.phenotype-item {
+    background: var(--bg-warm);
+    border: 1px solid #E2E8F0;
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.25s ease;
+}
+
+.phenotype-item:hover {
+    background: white;
+    border-color: var(--pcos-coral);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.phenotype-item-badge {
+    align-self: flex-start;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 0.75rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.badge-pheno-a { background: #FFE4E6; color: #9F1239; }
+.badge-pheno-b { background: #FEF3C7; color: #92400E; }
+.badge-pheno-c { background: #E0E7FF; color: #3730A3; }
+.badge-pheno-d { background: #CCFBF1; color: #115E59; }
+
+.phenotype-item h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.4rem;
+}
+
+.phenotype-item .pheno-criteria {
+    font-size: 0.82rem;
+    color: var(--pcos-teal-dark);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+}
+
+.phenotype-item p {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.phenotype-item .pheno-focus {
+    margin-top: 0.8rem;
+    padding-top: 0.6rem;
+    border-top: 1px dashed #CBD5E1;
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+.phenotype-item .pheno-focus strong {
+    color: var(--text-dark);
+}
+
+/* ==================== Enhanced Step 2 & 3 Clinical Styles ==================== */
+.symptom-hint {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.4rem;
+    line-height: 1.4;
+    display: block;
+}
+
+/* Rotterdam Diagnostic Results Card (Step 3) */
+.rotterdam-result-box {
+    background: white;
+    border: 2px solid rgba(13, 148, 136, 0.25);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    margin: 2rem 0;
+    text-align: left;
+    box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08);
+}
+
+.rotterdam-result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.rotterdam-result-header h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.rotterdam-count-pill {
+    padding: 0.35rem 0.85rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+.count-positive {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.count-borderline {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.count-negative {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.rotterdam-pillars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.rotterdam-pillar-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+}
+
+.rotterdam-pillar-row.met {
+    background: #FFF1F2;
+    border-color: #FECDD3;
+}
+
+.rotterdam-pillar-row.not-met {
+    background: #F0FDF4;
+    border-color: #DCFCE7;
+}
+
+.rotterdam-pillar-icon {
+    font-size: 1.1rem;
+    margin-top: 2px;
+}
+
+.rotterdam-pillar-row.met .rotterdam-pillar-icon { color: #E11D48; }
+.rotterdam-pillar-row.not-met .rotterdam-pillar-icon { color: #10B981; }
+
+.rotterdam-pillar-info {
+    flex: 1;
+}
+
+.rotterdam-pillar-info strong {
+    display: block;
+    font-size: 0.92rem;
+    color: var(--text-dark);
+    margin-bottom: 0.15rem;
+}
+
+.rotterdam-pillar-info span {
+    font-size: 0.82rem;
+    color: var(--text-light);
+}
+
+/* Phenotype Result Card (Step 3) */
+.phenotype-result-card {
+    background: linear-gradient(135deg, #F0FDFA 0%, #FFF1F2 100%);
+    border: 2px solid var(--pcos-coral);
+    border-radius: var(--radius);
+    padding: 1.6rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.phenotype-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+}
+
+.phenotype-code-badge {
+    background: var(--gradient);
+    color: white;
+    font-size: 1rem;
+    font-weight: 800;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+.phenotype-header h4 {
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.phenotype-result-card p.pheno-desc {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+}
+
+.phenotype-result-card .pheno-action-box {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    border-left: 4px solid var(--pcos-teal);
+}
+
+/* 4 Pillar Breakdown Bars (Step 3) */
+.pillar-breakdown-section {
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: var(--radius);
+    padding: 1.6rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.pillar-breakdown-section h4 {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pillar-gauges-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.pillar-gauge-card {
+    background: #F8FAFC;
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid #E2E8F0;
+}
+
+.pillar-gauge-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.pillar-gauge-bar {
+    height: 8px;
+    background: #E2E8F0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pillar-gauge-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+
+/* Responsive adjustments for Rotterdam grid */
+@media (max-width: 900px) {
+    .rotterdam-grid {
+        grid-template-columns: 1fr;
+    }
+    .phenotype-cards-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .pillar-gauges-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 580px) {
+    .phenotype-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+

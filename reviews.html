@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Reviews - HormoCare AI</title>
+    <title>HormoCare</title>
     <link rel="stylesheet" href="styles/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -248,11 +248,15 @@
             <a href="index.html" class="logo">
                 <i class="fas fa-heartbeat"></i>
                 <span>HormoCare AI</span>
+                <span class="nav-pcos-pill">PCOS CARE</span>
             </a>
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="index.html#app" class="nav-link">Tracker</a>
-                <a href="doctor-consultation.html" class="nav-link">Doctors</a>
+                <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                <a href="doctor-consultation.html" class="nav-link"><i class="fas fa-stethoscope"></i> Doctors</a>
+                <a href="medicine-store.html" class="nav-link">Store</a>
                 <a href="reviews.html" class="nav-link diet-link active"><i class="fas fa-star"></i> Reviews</a>
             </div>
             <button class="nav-toggle">
@@ -364,6 +368,7 @@
         <div class="reviews-list" id="reviewsList"></div>
     </div>
 
+    <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
     <script>
         let userRating = 0;
@@ -371,6 +376,7 @@
 
         const sampleReviews = [
             {
+                id: 'sample-1',
                 name: 'Ananya P.',
                 rating: 5,
                 date: '2026-03-15',
@@ -379,6 +385,7 @@
                 verified: true
             },
             {
+                id: 'sample-2',
                 name: 'Priya S.',
                 rating: 5,
                 date: '2026-03-10',
@@ -387,6 +394,7 @@
                 verified: true
             },
             {
+                id: 'sample-3',
                 name: 'Deepika M.',
                 rating: 4,
                 date: '2026-03-08',
@@ -395,6 +403,7 @@
                 verified: true
             },
             {
+                id: 'sample-4',
                 name: 'Riya K.',
                 rating: 5,
                 date: '2026-03-05',
@@ -403,6 +412,7 @@
                 verified: false
             },
             {
+                id: 'sample-5',
                 name: 'Neha R.',
                 rating: 5,
                 date: '2026-02-28',
@@ -411,6 +421,7 @@
                 verified: true
             },
             {
+                id: 'sample-6',
                 name: 'Shreya J.',
                 rating: 4,
                 date: '2026-02-25',
@@ -419,6 +430,7 @@
                 verified: true
             },
             {
+                id: 'sample-7',
                 name: 'Meera D.',
                 rating: 5,
                 date: '2026-02-20',
@@ -427,6 +439,7 @@
                 verified: true
             },
             {
+                id: 'sample-8',
                 name: 'Kavya B.',
                 rating: 5,
                 date: '2026-02-18',
@@ -436,14 +449,20 @@
             }
         ];
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const navToggle = document.querySelector('.nav-toggle');
             const navMenu = document.querySelector('.nav-menu');
             if (navToggle && navMenu) {
                 navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
             }
 
-            loadUserReviews();
+            // Pre-fill profile name if available
+            const prof = (window.hormoCareApp && hormoCareApp.getProfile()) || {};
+            if (prof.name) {
+                document.getElementById('reviewerName').value = prof.name;
+            }
+
+            await loadUserReviews();
             renderReviews();
             updateStats();
 
@@ -474,7 +493,7 @@
             });
         });
 
-        function submitReview() {
+        async function submitReview() {
             const name = document.getElementById('reviewerName').value;
             const text = document.getElementById('reviewText').value;
 
@@ -489,25 +508,29 @@
             }
 
             const review = {
+                id: 'REV-' + Date.now().toString(36),
                 name,
                 rating: userRating,
                 text,
                 date: new Date().toISOString().split('T')[0],
                 helpful: 0,
-                verified: false
+                verified: true,
+                userSubmitted: true
             };
 
+            if (window.HormoCareStorage) {
+                await window.HormoCareStorage.saveReview(review);
+            }
             userReviews.unshift(review);
             saveUserReviews();
             renderReviews();
             updateStats();
 
-            document.getElementById('reviewerName').value = '';
             document.getElementById('reviewText').value = '';
             userRating = 0;
             document.querySelectorAll('#starInput i').forEach(s => s.classList.remove('active'));
 
-            showMessage('Thank you for your review! It will be published after verification.', 'success');
+            showMessage('Thank you for your review! It has been saved to your local database.', 'success');
         }
 
         function renderReviews() {
@@ -520,6 +543,7 @@
                             <div class="reviewer-name">
                                 ${review.name}
                                 ${review.verified ? '<span class="verified-badge"><i class="fas fa-check-circle"></i> Verified User</span>' : ''}
+                                ${review.userSubmitted ? '<span style="font-size:0.75rem; background:#EBF8FF; color:#2B6CB0; padding:0.15rem 0.5rem; border-radius:10px; margin-left:0.4rem;">Your Review</span>' : ''}
                             </div>
                             <div class="review-meta">
                                 <span class="review-stars">${'⭐'.repeat(review.rating)}</span>
@@ -529,22 +553,50 @@
                         </div>
                     </div>
                     <p class="review-text">${review.text}</p>
-                    <div class="review-helpful">
-                        <button class="helpful-btn" onclick="markHelpful(${idx})">
+                    <div class="review-helpful" style="display:flex; justify-content:space-between; align-items:center;">
+                        <button class="helpful-btn" onclick="markHelpful('${review.id || idx}')">
                             <i class="fas fa-thumbs-up"></i> Helpful (${review.helpful})
                         </button>
+                        ${review.userSubmitted ? `
+                            <button onclick="deleteMyReview('${review.id}')" style="background:none; border:none; color:#E53E3E; font-size:0.8rem; cursor:pointer;">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             `).join('');
         }
 
-        function markHelpful(idx) {
-            const allReviews = [...userReviews, ...sampleReviews];
-            if (idx < userReviews.length) {
-                userReviews[idx].helpful++;
+        async function markHelpful(idOrIdx) {
+            if (window.HormoCareStorage) {
+                await window.HormoCareStorage.markReviewHelpful(idOrIdx);
+            }
+            const foundUser = userReviews.find(r => r.id === idOrIdx);
+            if (foundUser) {
+                foundUser.helpful++;
                 saveUserReviews();
+            } else {
+                const foundSample = sampleReviews.find(r => r.id === idOrIdx);
+                if (foundSample) foundSample.helpful++;
             }
             renderReviews();
+        }
+
+        async function deleteMyReview(id) {
+            if (confirm('Delete this review?')) {
+                userReviews = userReviews.filter(r => r.id !== id);
+                saveUserReviews();
+                if (window.HormoCareStorage && window.HormoCareStorage.isServerConnected) {
+                    try {
+                        const all = await window.HormoCareStorage.getReviews();
+                        const updated = all.filter(r => r.id !== id);
+                        localStorage.setItem('hormocare_reviews', JSON.stringify(updated));
+                    } catch (e) {}
+                }
+                renderReviews();
+                updateStats();
+                showMessage('Review deleted.', 'success');
+            }
         }
 
         function updateStats() {
@@ -553,8 +605,7 @@
             document.getElementById('reviewCount').textContent = total.toLocaleString();
             
             const baseUsers = 12458;
-            const newUsers = Math.floor(Math.random() * 50);
-            document.getElementById('totalUsers').textContent = (baseUsers + newUsers).toLocaleString();
+            document.getElementById('totalUsers').textContent = (baseUsers + userReviews.length * 3).toLocaleString();
         }
 
         function formatDate(dateStr) {
@@ -566,12 +617,16 @@
             localStorage.setItem('hormocare_reviews', JSON.stringify(userReviews));
         }
 
-        function loadUserReviews() {
-            try {
-                const saved = localStorage.getItem('hormocare_reviews');
-                if (saved) userReviews = JSON.parse(saved);
-            } catch (e) {
-                console.error('Error loading reviews:', e);
+        async function loadUserReviews() {
+            if (window.HormoCareStorage) {
+                userReviews = await window.HormoCareStorage.getReviews();
+            } else {
+                try {
+                    const saved = localStorage.getItem('hormocare_reviews');
+                    if (saved) userReviews = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading reviews:', e);
+                }
             }
         }
 

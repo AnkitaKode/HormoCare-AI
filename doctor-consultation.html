@@ -279,6 +279,80 @@
             color: var(--accent);
             margin-right: 0.5rem;
         }
+        .my-bookings-section {
+            background: #FFFFFF;
+            border: 2px solid #E8E8E8;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .my-bookings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #F0F0F0;
+            padding-bottom: 0.8rem;
+        }
+        .my-bookings-header h3 {
+            margin: 0;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .booking-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .booking-main-info h4 {
+            margin: 0 0 0.3rem 0;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+        .booking-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .booking-status {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: #EBF8FF;
+            color: #2B6CB0;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .booking-status.confirmed {
+            background: #F0FFF4;
+            color: #276749;
+        }
+        .cancel-booking-btn {
+            background: #FFF5F5;
+            color: #E53E3E;
+            border: 1px solid #FEB2B2;
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .cancel-booking-btn:hover {
+            background: #FED7D7;
+        }
         @media (max-width: 768px) {
             .consult-grid {
                 grid-template-columns: 1fr;
@@ -297,13 +371,17 @@
         <div class="nav-container">
             <a href="index.html" class="logo">
                 <i class="fas fa-heartbeat"></i>
-                <span>HormoCare AI</span>
+                <span>HormoCare</span>
+                <span class="nav-pcos-pill">PCOS CARE</span>
             </a>
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="index.html#app" class="nav-link">Tracker</a>
-                <a href="diet-tracker.html" class="nav-link">Diet</a>
+                <a href="diet-tracker.html" class="nav-link">Diet Tracker</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
                 <a href="doctor-consultation.html" class="nav-link diet-link active"><i class="fas fa-stethoscope"></i> Doctors</a>
+                <a href="medicine-store.html" class="nav-link">Store</a>
+                <a href="reviews.html" class="nav-link"><i class="fas fa-star"></i> Reviews</a>
             </div>
             <button class="nav-toggle">
                 <span></span>
@@ -374,6 +452,15 @@
             <input type="file" id="fileInput" class="upload-input" multiple accept=".pdf,.jpg,.jpeg,.png">
             <p style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;">Accepted formats: PDF, JPG, PNG (Max 10MB per file)</p>
             <div class="uploaded-files" id="uploadedFiles"></div>
+        </div>
+
+        <!-- My Booked Consultations -->
+        <div class="my-bookings-section" id="myBookingsSection" style="display:none;">
+            <div class="my-bookings-header">
+                <h3><i class="fas fa-calendar-check"></i> My Scheduled Appointments</h3>
+                <span id="bookingCountBadge" class="booking-status confirmed">0 Bookings</span>
+            </div>
+            <div id="bookingsList"></div>
         </div>
 
         <!-- Available Doctors -->
@@ -519,6 +606,7 @@
         </div>
     </div>
 
+    <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
     <script>
         let selectedConsultType = 'voice';
@@ -526,7 +614,7 @@
         let uploadedReports = [];
         let selectedTimeSlot = '';
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const navToggle = document.querySelector('.nav-toggle');
             const navMenu = document.querySelector('.nav-menu');
             if (navToggle && navMenu) {
@@ -560,24 +648,31 @@
             document.getElementById('cancelBookingBtn').addEventListener('click', () => {
                 document.getElementById('bookingForm').classList.remove('active');
             });
+
+            await loadReports();
+            await loadMyBookings();
         });
 
-        function handleFileUpload(e) {
+        async function handleFileUpload(e) {
             const files = Array.from(e.target.files);
-            files.forEach(file => {
+            for (const file of files) {
                 if (file.size > 10 * 1024 * 1024) {
                     alert(`${file.name} exceeds 10MB limit`);
-                    return;
+                    continue;
                 }
-                uploadedReports.push({
-                    name: file.name,
-                    size: (file.size / 1024).toFixed(1) + ' KB',
-                    type: file.type,
-                    uploadDate: new Date().toISOString()
-                });
-            });
+                if (window.HormoCareStorage) {
+                    const saved = await window.HormoCareStorage.uploadReport(file);
+                    uploadedReports.push(saved);
+                } else {
+                    uploadedReports.push({
+                        name: file.name,
+                        size: (file.size / 1024).toFixed(1) + ' KB',
+                        type: file.type,
+                        uploadDate: new Date().toISOString()
+                    });
+                }
+            }
             renderUploadedFiles();
-            saveReportsToStorage();
         }
 
         function renderUploadedFiles() {
@@ -587,43 +682,109 @@
                 return;
             }
             container.innerHTML = uploadedReports.map((file, idx) => `
-                <div class="uploaded-file">
-                    <i class="fas fa-file-${file.type.includes('pdf') ? 'pdf' : 'image'} file-icon"></i>
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${file.size}</div>
+                <div class="uploaded-file" style="display:flex; align-items:center; justify-content:space-between; padding:0.8rem; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:8px; margin-top:0.5rem;">
+                    <div style="display:flex; align-items:center; gap:0.8rem;">
+                        <i class="fas fa-file-${file.type && file.type.includes('pdf') ? 'pdf' : 'image'} file-icon" style="color:var(--primary); font-size:1.3rem;"></i>
+                        <div class="file-info">
+                            <div class="file-name" style="font-weight:600;">${file.name}</div>
+                            <div class="file-size" style="font-size:0.8rem; color:#718096;">${file.size} • ${new Date(file.uploadDate).toLocaleDateString('en-IN')}</div>
+                        </div>
                     </div>
-                    <button class="remove-file-btn" onclick="removeFile(${idx})">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                        ${(file.dataUrl || file.downloadUrl) ? `
+                            <a href="${file.dataUrl || file.downloadUrl}" target="_blank" download="${file.name}" class="btn-small" style="text-decoration:none; padding:0.3rem 0.6rem; font-size:0.8rem; background:#EDF2F7; color:#2D3748; border-radius:4px;">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        ` : ''}
+                        <button class="remove-file-btn" onclick="removeFile('${file.id || idx}')" style="background:none; border:none; color:#E53E3E; cursor:pointer; padding:0.3rem;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        function removeFile(idx) {
-            uploadedReports.splice(idx, 1);
+        async function removeFile(idOrIdx) {
+            if (window.HormoCareStorage) {
+                await window.HormoCareStorage.deleteReport(idOrIdx);
+            }
+            uploadedReports = uploadedReports.filter((r, idx) => r.id !== idOrIdx && idx != idOrIdx);
             renderUploadedFiles();
-            saveReportsToStorage();
         }
 
-        function saveReportsToStorage() {
-            localStorage.setItem('hormocare_reports', JSON.stringify(uploadedReports));
+        async function loadReports() {
+            if (window.HormoCareStorage) {
+                uploadedReports = await window.HormoCareStorage.getReports();
+            } else {
+                try {
+                    const saved = localStorage.getItem('hormocare_reports');
+                    if (saved) uploadedReports = JSON.parse(saved);
+                } catch (e) {}
+            }
+            renderUploadedFiles();
         }
 
-        function loadReportsFromStorage() {
-            try {
-                const saved = localStorage.getItem('hormocare_reports');
-                if (saved) uploadedReports = JSON.parse(saved);
-                renderUploadedFiles();
-            } catch (e) {
-                console.error('Error loading reports:', e);
+        async function loadMyBookings() {
+            let bookings = [];
+            if (window.HormoCareStorage) {
+                bookings = await window.HormoCareStorage.getBookings();
+            } else {
+                try {
+                    bookings = JSON.parse(localStorage.getItem('hormocare_bookings') || '[]');
+                } catch (e) {}
+            }
+
+            const sec = document.getElementById('myBookingsSection');
+            const list = document.getElementById('bookingsList');
+            const countBadge = document.getElementById('bookingCountBadge');
+
+            if (!bookings || bookings.length === 0) {
+                sec.style.display = 'none';
+                return;
+            }
+
+            sec.style.display = 'block';
+            countBadge.textContent = `${bookings.length} Scheduled`;
+
+            list.innerHTML = bookings.map(b => `
+                <div class="booking-card">
+                    <div class="booking-main-info">
+                        <h4><i class="fas fa-user-md" style="color:var(--primary); margin-right:0.3rem;"></i> ${b.doctor}</h4>
+                        <div class="booking-meta">
+                            <span><i class="fas fa-calendar-day"></i> ${b.date}</span>
+                            <span><i class="fas fa-clock"></i> ${b.time}</span>
+                            <span><i class="fas fa-${b.type === 'video' ? 'video' : b.type === 'voice' ? 'phone-alt' : 'hospital'}"></i> ${b.type ? b.type.toUpperCase() : 'CONSULTATION'}</span>
+                            <span class="booking-status confirmed">${b.status || 'Confirmed'}</span>
+                        </div>
+                        ${b.concerns ? `<p style="font-size:0.85rem; color:#4A5568; margin-top:0.4rem; font-style:italic;">"${b.concerns}"</p>` : ''}
+                    </div>
+                    <div>
+                        <button class="cancel-booking-btn" onclick="cancelBooking('${b.id}')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function cancelBooking(id) {
+            if (confirm('Are you sure you want to cancel this consultation appointment?')) {
+                if (window.HormoCareStorage) {
+                    await window.HormoCareStorage.cancelBooking(id);
+                } else {
+                    let bookings = JSON.parse(localStorage.getItem('hormocare_bookings') || '[]');
+                    bookings = bookings.filter(b => b.id !== id);
+                    localStorage.setItem('hormocare_bookings', JSON.stringify(bookings));
+                }
+                await loadMyBookings();
+                showMessage('Appointment cancelled successfully.', 'success');
             }
         }
 
         function showBookingForm() {
             const typeLabels = { voice: 'Voice Call (₹499)', video: 'Video Call (₹699)', 'in-person': 'In-Person Visit (₹1,200)' };
             document.getElementById('selectedDoctor').value = selectedDoctor;
-            document.getElementById('selectedType').value = typeLabels[selectedConsultType];
+            document.getElementById('selectedType').value = typeLabels[selectedConsultType] || selectedConsultType;
             document.getElementById('bookingForm').classList.add('active');
             document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
             generateTimeSlots();
@@ -648,7 +809,7 @@
             });
         }
 
-        function confirmBooking() {
+        async function confirmBooking() {
             const date = document.getElementById('consultDate').value;
             const concerns = document.getElementById('consultConcerns').value;
 
@@ -658,36 +819,39 @@
             }
 
             const booking = {
+                id: 'BK-' + Date.now().toString(36).toUpperCase(),
                 doctor: selectedDoctor,
                 type: selectedConsultType,
                 date,
                 time: selectedTimeSlot,
                 concerns,
-                reports: uploadedReports,
+                status: 'Confirmed',
+                reports: uploadedReports.map(r => ({ name: r.name, size: r.size })),
                 bookingDate: new Date().toISOString()
             };
 
-            let bookings = [];
-            try {
-                bookings = JSON.parse(localStorage.getItem('hormocare_bookings') || '[]');
-            } catch (e) {}
-            bookings.push(booking);
-            localStorage.setItem('hormocare_bookings', JSON.stringify(bookings));
+            if (window.HormoCareStorage) {
+                await window.HormoCareStorage.saveBooking(booking);
+            } else {
+                let bookings = [];
+                try { bookings = JSON.parse(localStorage.getItem('hormocare_bookings') || '[]'); } catch (e) {}
+                bookings.unshift(booking);
+                localStorage.setItem('hormocare_bookings', JSON.stringify(bookings));
+            }
 
-            showMessage('Consultation booked successfully! You will receive a confirmation email shortly.', 'success');
-            setTimeout(() => {
-                window.location.href = 'index.html#app';
-            }, 2000);
+            showMessage('🎉 Consultation booked successfully! Your appointment details are shown below.', 'success');
+            document.getElementById('bookingForm').classList.remove('active');
+            await loadMyBookings();
+            document.getElementById('myBookingsSection').scrollIntoView({ behavior: 'smooth' });
         }
 
         function showMessage(text, type) {
             const el = document.getElementById('booking-msg');
             if (el) {
                 el.innerHTML = `<div class="msg msg-${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${text}</div>`;
+                setTimeout(() => { el.innerHTML = ''; }, 4000);
             }
         }
-
-        loadReportsFromStorage();
     </script>
 </body>
 </html>
